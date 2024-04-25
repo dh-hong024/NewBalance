@@ -1,14 +1,14 @@
 package practice.newbalance.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import practice.newbalance.domain.member.Member;
 
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Getter
+@Setter
 public class MemberDto {
 
     private String userId;

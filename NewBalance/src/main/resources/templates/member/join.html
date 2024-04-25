@@ -12,23 +12,23 @@
 <form action="/member/new" method="post" th:object="${memberDto}">
 
     <label th:for="userId">아이디</label>
-    <input type="text" name="userId"  > <br>
+    <input type="text"  th:field="*{userId}"  > <br>
 
     <label th:for="password">비밀번호</label>
-    <input type="password" name="password"> <br>
+    <input type="password" th:field="*{password}"> <br>
 
     <label th:for="name">이름</label>
-    <input type="text" name="name" > <br>
+    <input type="text" th:field="*{name}" > <br>
 
     <label th:for="sex">성별</label>
-    <input type="radio" th:checked="name" name="sex" th:value="남자" th:text="남">
-    <input type="radio"  name="sex" th:value="여자" th:text="여"> <br>
+    <input type="radio" th:field="*{sex}" th:value="남자" th:text="남" th:checked="true">
+    <input type="radio" th:field="*{sex}" th:value="여자" th:text="여"> <br>
 
     <label th:for="email">이메일</label>
-    <input type="email" name="email" > <br>
+    <input type="email" th:field="*{email}" > <br>
 
     <label th:for="phoneNumber">전화번호</label>
-    <input type="text" name="phoneNumber" > <br>
+    <input type="text" th:field="*{phoneNumber}" > <br>
 
     <button type="submit">회원가입</button>
 </form>
