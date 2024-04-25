@@ -2,7 +2,7 @@ package practice.newbalance.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import practice.newbalance.dto.MemberDto;
+import practice.newbalance.dto.member.MemberDto;
 import practice.newbalance.repository.MemberRepository;
 
 @Service

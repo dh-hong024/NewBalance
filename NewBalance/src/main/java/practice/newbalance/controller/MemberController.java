@@ -6,7 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import practice.newbalance.dto.MemberDto;
+import practice.newbalance.dto.member.MemberDto;
 import practice.newbalance.service.MemberService;
 
 @Controller

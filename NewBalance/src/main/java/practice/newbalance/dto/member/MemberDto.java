@@ -1,4 +1,4 @@
-package practice.newbalance.dto;
+package practice.newbalance.dto.member;
 
 import lombok.*;
 import practice.newbalance.domain.member.Member;
