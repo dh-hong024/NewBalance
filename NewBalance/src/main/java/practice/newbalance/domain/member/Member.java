@@ -2,6 +2,7 @@ package practice.newbalance.domain.member;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
@@ -35,7 +36,5 @@ public class Member {
 
     @Column(name = "phone_number")
     private String phoneNumber;
-
-
 
 }
