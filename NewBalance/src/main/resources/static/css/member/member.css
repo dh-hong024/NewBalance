@@ -1,0 +1,19 @@
+.modal--bg {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background-color: gray;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.visible {
+    visibility: visible;
+}
+
+.hidden {
+    background-color: white;
+    visibility: hidden;
+}
