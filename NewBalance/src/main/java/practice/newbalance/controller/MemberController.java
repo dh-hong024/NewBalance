@@ -1,5 +1,6 @@
 package practice.newbalance.controller;
 
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +18,7 @@ import practice.newbalance.web.validator.CheckUserIdValidator;
 
 
 @Controller
+@SessionAttributes("member")
 @RequiredArgsConstructor
 @Slf4j
 public class MemberController {
@@ -50,12 +52,10 @@ public class MemberController {
     @PostMapping("/members/new")
     public String memberJoin(@Valid MemberDto memberDto, BindingResult bindingResult, Model model) {
 
-
         // 검증
         if(bindingResult.hasErrors()){
             //회원가입 실패 시 입력 데이터 값 유지
             model.addAttribute("memberDto", memberDto);
-
             //회원 가입 페이지로 리턴
             return "/member/join";
         }
@@ -77,12 +77,16 @@ public class MemberController {
      * 로그인 처리
      */
     @PostMapping("/members/loginCheck")
-    public String memberLoginChecked(@ModelAttribute MemberDto memberDto, Model model) {
+    public String memberLoginChecked(@ModelAttribute MemberDto memberDto, HttpSession session) {
 
-        Member member = memberService.login(memberDto);
-        log.info("login : {}", member);
+        //jwt참고
+        //https://sepang2.tistory.com/81
 
-        if(member != null && member.getPassword().equals(memberDto.toEntity().getPassword())){
+        MemberDto loginResult = memberService.login(memberDto);
+        log.info("login : {}", loginResult);
+        if(loginResult != null) {
+            //login 성공
+            session.setAttribute("loginId", loginResult.getUserId());
             return "/home";
         }else{
             return "/member/login";

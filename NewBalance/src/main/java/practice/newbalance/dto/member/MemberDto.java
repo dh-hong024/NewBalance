@@ -41,6 +41,5 @@ public class MemberDto {
 
     public MemberDto(Member member) {
         this.userId = member.getUserId();
-        this.password = member.getPassword();
     }
 }

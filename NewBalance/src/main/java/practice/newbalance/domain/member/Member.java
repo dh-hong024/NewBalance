@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.*;
+import practice.newbalance.dto.member.MemberDto;
 
 @Entity
 @Table(name = "member")
@@ -37,4 +38,15 @@ public class Member {
     @Column(name = "phone_number")
     private String phoneNumber;
 
+    public MemberDto toDTO() {
+        MemberDto memberDto = MemberDto.builder()
+                .userId(userId)
+                .password(password)
+                .name(name)
+                .sex(sex)
+                .email(email)
+                .phoneNumber(phoneNumber)
+                .build();
+        return memberDto;
+    }
 }
