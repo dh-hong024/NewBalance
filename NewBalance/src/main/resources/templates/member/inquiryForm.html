@@ -72,6 +72,7 @@ function submitFunc(event){
                 document.getElementById("pw-reset-btn").disabled = true;
 
             }else{
+                document.getElementById("pw-reset-btn").disabled = false;
                 document.getElementById("userId")
                     .innerText = "고객님의 정보로 가입된 아이디는 "
                                 + res.userId
