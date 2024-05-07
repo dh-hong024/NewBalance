@@ -4,6 +4,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import lombok.*;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import practice.newbalance.domain.member.Member;
 
 @AllArgsConstructor
@@ -27,10 +28,10 @@ public class MemberDto {
     private String email;
     private String phoneNumber;
 
-    public Member toEntity() {
+    public Member toEntity(PasswordEncoder passwordEncoder) {
         Member member = Member.builder()
                 .userId(userId)
-                .password(password)
+                .password(passwordEncoder.encode(password))
                 .name(name)
                 .sex(sex)
                 .email(email)
@@ -39,7 +40,8 @@ public class MemberDto {
         return member;
     }
 
-    public MemberDto(Member member) {
-        this.userId = member.getUserId();
+    public MemberDto(Member member, String password) {
+        this.userId = getUserId();
+        this.password = password;
     }
 }
