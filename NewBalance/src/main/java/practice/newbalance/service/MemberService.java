@@ -1,6 +1,7 @@
 package practice.newbalance.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,11 +17,17 @@ import java.util.Optional;
 public class MemberService{
 
     private final MemberRepository memberRepository;
-    private final PasswordEncoder passwordEncoder;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public Long join(MemberDto memberDto) {
-//        return memberRepository.save(Member.toDTO(memberDto)).getId();
-        return memberRepository.save(memberDto.toEntity(passwordEncoder)).getId();
+
+        //db에 이미 동일한 userId를 가진 회원이 존재하는지 검증
+        boolean isUser = memberRepository.existsByUserId(memberDto.getUserId());
+        if(isUser) {
+            return null;
+        }
+
+        return memberRepository.save(memberDto.toEntity(bCryptPasswordEncoder, "ROLE_USER")).getId();
     }
 
 

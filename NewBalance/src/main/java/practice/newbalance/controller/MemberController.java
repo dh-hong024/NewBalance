@@ -69,15 +69,15 @@ public class MemberController {
     /**
      * 로그인 폼 화면 이동
      */
-    @RequestMapping ( "/members/login")
-    public String memberLogin(@RequestParam(value = "error", required = false) String error,
-                              @RequestParam(value = "exception", required = false) String exception,
-                              Model model) {
-        model.addAttribute("memberDto", new MemberDto());
-        model.addAttribute("error", error);
-        model.addAttribute("exception", exception);
-        return "/member/login";
-    }
+//    @RequestMapping ( "/members/login")
+//    public String memberLogin(@RequestParam(value = "error", required = false) String error,
+//                              @RequestParam(value = "exception", required = false) String exception,
+//                              Model model) {
+//        model.addAttribute("memberDto", new MemberDto());
+//        model.addAttribute("error", error);
+//        model.addAttribute("exception", exception);
+//        return "/member/login";
+//    }
 
 /**
  * 아이디, 이메일 중복체크 없이 유효성 검증 클래스 생성하여 처리함

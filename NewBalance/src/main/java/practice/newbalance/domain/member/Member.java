@@ -39,6 +39,9 @@ public class Member {
     @Column(name = "phone_number")
     private String phoneNumber;
 
+    @Column(name = "role")
+    private String role;
+
     public MemberDto toDTO() {
         MemberDto memberDto = MemberDto.builder()
                 .userId(userId)
@@ -47,6 +50,7 @@ public class Member {
                 .sex(sex)
                 .email(email)
                 .phoneNumber(phoneNumber)
+                .role(role)
                 .build();
         return memberDto;
     }

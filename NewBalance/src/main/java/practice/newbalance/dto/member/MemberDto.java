@@ -1,9 +1,11 @@
 package practice.newbalance.dto.member;
 
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import lombok.*;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import practice.newbalance.domain.member.Member;
 
@@ -28,14 +30,18 @@ public class MemberDto {
     private String email;
     private String phoneNumber;
 
-    public Member toEntity(PasswordEncoder passwordEncoder) {
+    @Column(name = "role")
+    private String role;
+
+    public Member toEntity(BCryptPasswordEncoder bCryptPasswordEncoder, String role) {
         Member member = Member.builder()
                 .userId(userId)
-                .password(passwordEncoder.encode(password))
+                .password(bCryptPasswordEncoder.encode(password))
                 .name(name)
                 .sex(sex)
                 .email(email)
                 .phoneNumber(phoneNumber)
+                .role(role)
                 .build();
         return member;
     }
