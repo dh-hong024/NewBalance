@@ -5,13 +5,14 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import practice.newbalance.dto.member.MemberDto;
 
 @Controller
 public class LoginController {
 
+    /**
+     * 로그인 폼 화면 이동
+     */
     @GetMapping("/members/login")
     public String loginPage(HttpServletRequest request,
                             Model model){

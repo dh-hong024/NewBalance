@@ -2,10 +2,8 @@ package practice.newbalance.web.validator;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
-import practice.newbalance.domain.member.Member;
 import practice.newbalance.dto.member.MemberDto;
 import practice.newbalance.repository.MemberRepository;
 

@@ -2,15 +2,10 @@ package practice.newbalance.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import practice.newbalance.domain.member.Member;
 import practice.newbalance.dto.member.MemberDto;
 import practice.newbalance.repository.MemberRepository;
-
-import java.util.Optional;
-
 
 @Service
 @RequiredArgsConstructor

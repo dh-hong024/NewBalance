@@ -1,18 +1,14 @@
 package practice.newbalance.controller;
 
-import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
-import practice.newbalance.domain.member.Member;
 import practice.newbalance.dto.member.MemberDto;
 import practice.newbalance.service.MemberService;
 import practice.newbalance.web.validator.CheckEmailValidator;
@@ -67,22 +63,7 @@ public class MemberController {
     }
 
     /**
-     * 로그인 폼 화면 이동
-     */
-//    @RequestMapping ( "/members/login")
-//    public String memberLogin(@RequestParam(value = "error", required = false) String error,
-//                              @RequestParam(value = "exception", required = false) String exception,
-//                              Model model) {
-//        model.addAttribute("memberDto", new MemberDto());
-//        model.addAttribute("error", error);
-//        model.addAttribute("exception", exception);
-//        return "/member/login";
-//    }
-
-/**
- * 아이디, 이메일 중복체크 없이 유효성 검증 클래스 생성하여 처리함
- */
-    /**
+     * 아이디, 이메일 중복체크 없이 유효성 검증 클래스 생성하여 처리함
      * 아이디 중복체크
      */
     @GetMapping("/members/{userId}/exists")
@@ -96,53 +77,4 @@ public class MemberController {
     public ResponseEntity<Boolean> checkEmailDuplicate(@PathVariable(value = "email") String email) {
         return ResponseEntity.ok(memberService.checkEmail(email));
     }
-
-
-
-
-    /**
-     * 로그인 처리
-     */
-//    @RequestMapping(value = "/members/loginCheck", method = RequestMethod.POST)
-//    public String memberLoginChecked(@ModelAttribute MemberDto memberDto, HttpSession session) {
-//
-//        //jwt참고
-//        //https://sepang2.tistory.com/81
-////        UserDetails loginResult = memberService.loadUserByUsername(memberDto.getUserId());
-//        MemberDto loginResult = memberService.login(memberDto);
-//        log.info("login : {}", loginResult);
-//        if(loginResult != null) {
-//            //login 성공
-//            session.setAttribute("loginId", loginResult.getUserId());
-////            return "/home";
-//            return "/member/login";
-//        }else{
-//            return "/member/login";
-//        }
-//    }
-
-//    @PostMapping(value = "/loginError")
-//    public String memberLoginChecked(@RequestParam(value = "error", required = false) String error,
-//                                     @RequestParam(value = "exception", required = false) String exception,
-//                                     Model model) {
-
-        //jwt참고
-        //https://sepang2.tistory.com/81
-
-//        UserDetails loginResult = memberService.loadUserByUsername(memberDto.getUserId());
-//        MemberDto loginResult = memberService.login(memberDto);
-//        log.info("login : {}", loginResult);
-//        if(loginResult != null) {
-//            //login 성공
-//            session.setAttribute("loginId", loginResult.getUserId());
-////            return "/home";
-//            return "/member/login";
-//        }else{
-//            return "/member/login";
-//        }
-//        model.addAttribute("error", error);
-//        model.addAttribute("exception", exception);
-//        return "/member/login";
-
-//    }
 }

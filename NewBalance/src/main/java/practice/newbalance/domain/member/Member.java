@@ -1,11 +1,7 @@
 package practice.newbalance.domain.member;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
 import lombok.*;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import practice.newbalance.dto.member.MemberDto;
 
 @Entity
