@@ -35,8 +35,8 @@ public class MemberAuthenticationProvider implements AuthenticationProvider {
         //암호화 방식(BCryptPasswordEncoder)를 사용하여 비밀번호를 비교
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         if (!passwordEncoder.matches(password, dbPassword)) {
-            System.out.println("[사용자] 비밀번호가 일치하지 않습니다.");
-            throw new BadCredentialsException("아이디 또는 비밀번호가 일치하지 않습니다");
+            System.out.println("아이디 또는 비밀번호가 일치하지 않습니다.");
+            throw new BadCredentialsException("아이디 또는 비밀번호가 일치하지 않습니다.");
         }
 
         //인증이 성공하면 UsernamePasswordAuthenticationToken 객체를 반환

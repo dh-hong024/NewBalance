@@ -18,12 +18,6 @@ import practice.newbalance.config.provider.MemberAuthenticationProvider;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    //생성해둔 MemberAuthenticationProvider를 주입
-    //해당 클래스로 CustomUserDetailSerivce 내부 로직을 수행
-    //인증 처리고 같이 진행
-    @Autowired
-    MemberAuthenticationProvider memberAuthenticationProvider;
-
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
         http
