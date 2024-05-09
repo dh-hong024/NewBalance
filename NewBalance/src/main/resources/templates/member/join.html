@@ -49,10 +49,16 @@
         </div>
 
         <div>
-            <label th:for="phoneNumber">전화번호</label>
-            <input type="text" th:field="*{phoneNumber}" placeholder="전화번호를 입력해주세요"
-                th:class="${#fields.hasErrors('phoneNumber')} ? 'form-control field-error' : 'form-control'">
-            <p th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}"></p>
+            <label for="prefixNumber">전화번호</label>
+            <select name="prefixNumber" id="prefixNumber">
+                <option value="" th:each="prefixNumber : ${memberDto.getPrefixNumberList()}" th:value="${prefixNumber}" th:text="${prefixNumber}">11</option>
+            </select>
+            <input type="text" th:field="*{number}"
+                th:class="${#fields.hasErrors('number')} ? 'form-control field-error' : 'form-control'">
+            <p th:if="${#fields.hasErrors('number')}" th:errors="*{number}"></p>
+            <input type="text" th:field="*{suffixNumber}"
+                th:class="${#fields.hasErrors('suffixNumber')} ? 'form-control field-error' : 'form-control'">
+            <p th:if="${#fields.hasErrors('suffixNumber')}" th:errors="*{suffixNumber}"></p>
         </div>
 
         <button type="submit">회원가입</button>

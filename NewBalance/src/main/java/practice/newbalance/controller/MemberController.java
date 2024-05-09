@@ -3,20 +3,17 @@ package practice.newbalance.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import practice.newbalance.dto.member.MemberDto;
-import practice.newbalance.dto.member.UserInfoDto;
 import practice.newbalance.service.MemberService;
 import practice.newbalance.web.validator.CheckEmailValidator;
 import practice.newbalance.web.validator.CheckUserIdValidator;
 
 
-import java.util.HashMap;
 import java.util.Map;
 
 @Controller
@@ -72,20 +69,20 @@ public class MemberController {
      */
     @GetMapping("/members/inquiry")
     public String findIdForm(Model model){
-        model.addAttribute("userInfoDto", new UserInfoDto());
+        model.addAttribute("memberDto", new MemberDto());
         return "member/inquiryForm";
     }
 
     /**
      * 아이디 찾기
-     * @param userInfoDto
+     * @param memberDto
      * @return
      */
     @ResponseBody
     @PostMapping("/members/inquiry")
-    public Map<String, Object> inquiryFindId(@ModelAttribute UserInfoDto userInfoDto){
-        log.info("start userInfoDto = {}", userInfoDto);
-        return memberService.inquiryFindId(userInfoDto);
+    public Map<String, Object> inquiryFindId(@ModelAttribute MemberDto memberDto){
+        log.info("start memberDto = {}", memberDto);
+        return memberService.inquiryFindId(memberDto);
     }
 
     @ResponseBody

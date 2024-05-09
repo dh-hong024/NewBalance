@@ -6,7 +6,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import practice.newbalance.domain.member.Member;
 import practice.newbalance.dto.member.MemberDto;
-import practice.newbalance.dto.member.UserInfoDto;
 import practice.newbalance.repository.MemberRepository;
 
 import java.util.HashMap;
@@ -24,15 +23,15 @@ public class MemberService {
     public Long join(MemberDto memberDto) {
 
         //db에 이미 동일한 userId를 가진 회원이 존재하는지 검증
-        boolean isUser = memberRepository.existsByUserId(memberDto.getUserId());
-        if(isUser) {
-            return null;
-        }
+//        boolean isUser = memberRepository.existsByUserId(memberDto.getUserId());
+//        if(isUser) {
+//            return null;
+//        }
 
         return memberRepository.save(memberDto.toEntity(bCryptPasswordEncoder, "ROLE_USER")).getId();
     }
 
-    public Map<String, Object> inquiryFindId(UserInfoDto dto){
+    public Map<String, Object> inquiryFindId(MemberDto dto){
         Map<String, Object> result = new HashMap<>();
         String findUserId = memberRepository.findInquiryIdByNameAndPhoneNumber(
                 dto.getName(),
@@ -54,8 +53,12 @@ public class MemberService {
     public Map<String, Object> inquiryResetPw(String userId, String name, String phoneNumber){
         Map<String, Object> result = new HashMap<>();
         Optional<Member> findMember = memberRepository.findByUserId(userId, name, phoneNumber);
+
         if(findMember.isPresent()){
-            findMember.get().setPassword(UUID.randomUUID().toString().substring(0, 6));
+            String tempPw = UUID.randomUUID().toString().substring(0, 8);
+
+            //todo:임시 비밀번호 이메일 전송 로직 필요
+            findMember.get().setPassword(bCryptPasswordEncoder.encode(tempPw));
             result.put("result", true);
         }else{
             result.put("result", false);

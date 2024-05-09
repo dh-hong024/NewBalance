@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import lombok.*;
 import practice.newbalance.dto.member.MemberDto;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 @Entity
 @Table(name = "member")
 @Getter
@@ -45,9 +48,10 @@ public class Member {
                 .name(name)
                 .sex(sex)
                 .email(email)
-                .phoneNumber(phoneNumber)
+                .phoneNumber(getPhoneNumber())
                 .role(role)
                 .build();
         return memberDto;
     }
+
 }

@@ -17,14 +17,14 @@
 <h1>FIND ID/PW</h1>
 <h2>아이디/비밀번호 찾기 재설정</h2>
 <form action="" id="form" name="form"
-      th:action="@{/members/inquiry}" th:object="${userInfoDto}"
+      th:action="@{/members/inquiry}" th:object="${memberDto}"
       th:method="POST" onsubmit="submitFunc(event)">
     <label for="name">이름</label>
     <input type="text" id="name" th:field="*{name}"><br>
 
     <label for="prefixNumber">전화번호</label>
     <select name="prefixNumber" id="prefixNumber">
-        <option value="" th:each="prefixNumber : ${userInfoDto.getPrefixNumberList()}" th:value="${prefixNumber}" th:text="${prefixNumber}">11</option>
+        <option value="" th:each="prefixNumber : ${memberDto.getPrefixNumberList()}" th:value="${prefixNumber}" th:text="${prefixNumber}">11</option>
     </select>
     <input type="text" th:field="*{number}">
     <input type="text" th:field="*{suffixNumber}"><br>
