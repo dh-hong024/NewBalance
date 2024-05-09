@@ -10,10 +10,14 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import practice.newbalance.dto.member.MemberDto;
+import practice.newbalance.dto.member.UserInfoDto;
 import practice.newbalance.service.MemberService;
 import practice.newbalance.web.validator.CheckEmailValidator;
 import practice.newbalance.web.validator.CheckUserIdValidator;
 
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -62,19 +66,38 @@ public class MemberController {
         return "redirect:/members/login";
     }
 
+
     /**
-     * 아이디, 이메일 중복체크 없이 유효성 검증 클래스 생성하여 처리함
-     * 아이디 중복체크
+     * 아이디 찾기 폼 화면 이동
      */
-    @GetMapping("/members/{userId}/exists")
-    public ResponseEntity<Boolean> checkUserIdDuplicate(@PathVariable(value = "userId") String userId){
-        return ResponseEntity.ok(memberService.checkUserId(userId));
+    @GetMapping("/members/inquiry")
+    public String findIdForm(Model model){
+        model.addAttribute("userInfoDto", new UserInfoDto());
+        return "member/inquiryForm";
     }
+
     /**
-     * 이메일 중복체크
+     * 아이디 찾기
+     * @param userInfoDto
+     * @return
      */
-    @GetMapping("/members/{email}/exists")
-    public ResponseEntity<Boolean> checkEmailDuplicate(@PathVariable(value = "email") String email) {
-        return ResponseEntity.ok(memberService.checkEmail(email));
+    @ResponseBody
+    @PostMapping("/members/inquiry")
+    public Map<String, Object> inquiryFindId(@ModelAttribute UserInfoDto userInfoDto){
+        log.info("start userInfoDto = {}", userInfoDto);
+        return memberService.inquiryFindId(userInfoDto);
     }
+
+    @ResponseBody
+    @PostMapping("/members/inquiry/reset-pw")
+    public Map<String, Object> inquiryResetPw(
+            @RequestParam("userId") String userId,
+            @RequestParam("name") String name,
+            @RequestParam("phoneNumber") String phoneNumber
+    ){
+        return memberService.inquiryResetPw(userId, name, phoneNumber);
+    }
+
+
+
 }

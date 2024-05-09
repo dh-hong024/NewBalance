@@ -9,14 +9,20 @@ import java.util.Optional;
 
 public interface MemberRepository extends JpaRepository<Member, Long> {
 
-//    @Query(value = "select m from Member m where m.userId = :userId and m.password = :password")
-//    Optional<Member> findUser(@Param("userId") String userId, @Param("password") String password);
-
-    @Query(value = "select m from Member m where m.userId = :userId")
-    Optional<Member> findUser(@Param("userId") String userId);
+    @Query("select m.userId from Member m where m.name = :name and m.phoneNumber = :phoneNumber")
+    public String findInquiryIdByNameAndPhoneNumber(
+            @Param("name") String name,
+            @Param("phoneNumber") String phoneNumber
+    );
 
     Member findByUserId(String userId);
 
     boolean existsByUserId(String userId);
     boolean existsByEmail(String email);
+    @Query("select m from Member m where m.userId = :userId and m.name = :name and m.phoneNumber = :phoneNumber")
+    public Optional<Member> findByUserId(
+            @Param("userId") String userId,
+            @Param("name") String name,
+            @Param("phoneNumber") String phoneNumber
+    );
 }

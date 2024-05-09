@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <title>Document</title>
+    <style>
+
+    </style>
+</head>
+<body>
+<h1>FIND ID/PW</h1>
+<h2>아이디/비밀번호 찾기 재설정</h2>
+<form action="" id="form" name="form"
+      th:action="@{/members/inquiry}" th:object="${userInfoDto}"
+      th:method="POST" onsubmit="submitFunc(event)">
+    <label for="name">이름</label>
+    <input type="text" id="name" th:field="*{name}"><br>
+
+    <label for="prefixNumber">전화번호</label>
+    <select name="prefixNumber" id="prefixNumber">
+        <option value="" th:each="prefixNumber : ${userInfoDto.getPrefixNumberList()}" th:value="${prefixNumber}" th:text="${prefixNumber}">11</option>
+    </select>
+    <input type="text" th:field="*{number}">
+    <input type="text" th:field="*{suffixNumber}"><br>
+
+    <button class="btn btn-primary .btn-submit" type="submit" data-bs-toggle="modal" data-bs-target="#staticBackdrop" >아이디 찾기</button>
+</form>
+
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">아이디 찾기</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p id="userId"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" th:onclick="pwReset()" data-bs-dismiss="modal" id="pw-reset-btn">임시 비밀번호 설정</button>
+            </div>
+        </div>
+        <div>
+            <form action="" id="reset-pw-form">
+                <input type="hidden" id="pw-reset-custName" name="name">
+                <input type="hidden" id="pw-reset-phoneNumber" name="phoneNumber">
+                <input type="hidden" id="pw-reset-id" name="userId">
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+function submitFunc(event){
+    event.preventDefault();
+    $.ajax({
+        type : 'POST',
+        url : '/members/inquiry',
+        data : $("#form").serialize(),
+        success : (response) => {
+            let res = response;
+            if(res.userId == null){
+                document.getElementById("userId").innerText = "해당 정보로 가입된 아이디가 존재하지 않습니다.";
+                document.getElementById("pw-reset-btn").disabled = true;
+
+            }else{
+                document.getElementById("pw-reset-btn").disabled = false;
+                document.getElementById("userId")
+                    .innerText = "고객님의 정보로 가입된 아이디는 "
+                                + res.userId
+                                + "입니다.";
+                document.getElementById("pw-reset-custName").value = res.name;
+                document.getElementById("pw-reset-phoneNumber").value = res.phoneNumber;
+                document.getElementById("pw-reset-id").value = res.userId;
+            }
+
+        }
+    })
+}
+
+function pwReset(){
+    $.ajax({
+        type : 'POST',
+        url : '/members/inquiry/reset-pw',
+        data : $("#reset-pw-form").serialize(),
+        success : (response) => {
+            let res = response;
+            if(response.result){
+                alert("비밀번호 변경 완료");
+                location.href="/";
+            }else{
+                alert("비밀번호 변경 실패");
+                location.href="/members/inquiry";
+            }
+        }
+    })
+}
+
+</script>
+</body>
+</html>
