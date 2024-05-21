@@ -6,5 +6,7 @@ import practice.newbalance.dto.board.FaqDto;
 
 
 public interface CustomRepository {
-    Page<FaqDto> findPage(Pageable pageable, String condition, String tag);
+    Page<FaqDto> findAll(Pageable pageable);
+    Page<FaqDto> findAll(Pageable pageable, String condition, String tag);
+    Long getSearchCount(String condition, String tag);
 }

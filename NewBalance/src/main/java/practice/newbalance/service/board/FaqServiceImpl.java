@@ -6,7 +6,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 import practice.newbalance.dto.board.FaqDto;
+import practice.newbalance.repository.board.query.FaqRepository;
 import practice.newbalance.repository.board.query.FaqRepositoryImpl;
 
 import java.util.List;
@@ -15,16 +17,25 @@ import java.util.List;
 @RequiredArgsConstructor
 public class FaqServiceImpl implements FaqService{
 
-    private final FaqRepositoryImpl faqRepository;
+    private final FaqRepositoryImpl faqRepositoryImpl;
+    private final FaqRepository faqRepository;
 
-    public List<FaqDto> findAll(){
-        return faqRepository.findAll();
+    public Page<FaqDto> findAll(int page, int limit){
+        Pageable pageable = PageRequest.of(page, limit);
+        return faqRepositoryImpl.findAll(pageable);
     }
 
-    public Page<FaqDto> search(String condition, String tag, int page){
-        Pageable pageable = PageRequest.of(page, 3);
-        return faqRepository.findPage(pageable, condition, tag);
+    public Page<FaqDto> findAll(int page, int limit, String condition, String tag){
+        Pageable pageable = PageRequest.of(page, limit);
+        return faqRepositoryImpl.findAll(pageable, condition, tag);
+    }
 
+    public long getFaqCount(){
+        return faqRepository.count();
+    }
+
+    public Long getSearchCount(String condition, String tag){
+        return faqRepositoryImpl.getSearchCount(condition, tag);
     }
 
 }

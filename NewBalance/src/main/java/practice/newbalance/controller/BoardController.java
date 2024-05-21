@@ -9,7 +9,8 @@ import org.springframework.web.bind.annotation.*;
 import practice.newbalance.dto.board.FaqDto;
 import practice.newbalance.service.board.FaqServiceImpl;
 
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -20,31 +21,68 @@ public class BoardController {
     private final FaqServiceImpl faqService;
 
     @GetMapping("/faqs")
-    public String FaqList(Model model){
-        List<FaqDto> faqList = faqService.findAll();
-        model.addAttribute("contents", faqList);
+    public String FaqList(
+            @RequestParam(value = "condition", required = false) String condition,
+            @RequestParam(value = "tag", required = false) String tag,
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            Model model
+    ){
+        //todo: 설정 값으로 대체 예정
+        int limit = 3;
+        boolean isSearch = tag != null;
+
+        Page<FaqDto> faqList = isSearch ?
+                faqService.findAll(page, limit, condition, tag) :
+                faqService.findAll(page, limit);
+
+        long dataCnt = (
+                isSearch ?
+                        faqService.getSearchCount(condition, tag) - ((page + 1) * limit) :
+                        faqService.getFaqCount() - ((page + 1) * limit)
+        );
+
+        log.info("contents = {}, page = {}, count = {}", faqList.getContent(), page, dataCnt);
+
+        model.addAttribute("contents", faqList.getContent());
+        model.addAttribute("page", page);
+        model.addAttribute("count", dataCnt <= 0 ? 0 : dataCnt);
+        model.addAttribute("tag", tag);
+        model.addAttribute("condition", condition);
+
         return "board/faqs";
     }
 
-    @PostMapping("/search")
-    public String faqSearchContent(
+    @GetMapping("/api/faqs")
+    @ResponseBody
+    public Map<String, Object> getContents(
             @RequestParam(value = "condition", required = false) String condition,
             @RequestParam(value = "tag", required = false) String tag,
-            @RequestParam("page") Integer page,
+            @RequestParam(value = "page", defaultValue = "0") int page,
             Model model
-
     ){
+        //todo: 설정 값으로 대체 예정
+        int limit = 3;
+        boolean isSearch = tag != null;
+        Page<FaqDto> faqList = isSearch ?
+                faqService.findAll(page, limit, condition, tag) :
+                faqService.findAll(page, limit);
 
-        log.info("condition = {}, page = {}, tag = {}", condition, page, tag);
+        long dataCnt = (
+                isSearch ?
+                        faqService.getSearchCount(condition, tag) - ((page + 1) * limit) :
+                        faqService.getFaqCount() - ((page + 1) * limit)
+        );
 
-        Page<FaqDto> search = faqService.search(condition, tag, page);
+        log.info("contents = {}, page = {}, count = {}", faqList.getContent(), page, dataCnt);
 
-        model.addAttribute("contents", search.getContent());
-        model.addAttribute("condition", condition);
-        model.addAttribute("tag", tag);
-        log.info("search = {} ", search.getContent());
+        Map<String, Object> data = new HashMap<>();
+        data.put("contents", faqList.getContent());
+        data.put("page", page);
+        data.put("count", dataCnt <= 0 ? 0 : dataCnt);
+        data.put("tag", tag);
+        data.put("condition", condition);
 
-        return "board/faqs";
+        return data;
     }
 
 }

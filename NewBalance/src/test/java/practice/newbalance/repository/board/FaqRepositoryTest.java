@@ -48,12 +48,11 @@ class FaqRepositoryTest {
 
         em.flush();
         em.clear();
-
-        List<FaqDto> allList = faqRepository.findAll();
-        Assertions.assertThat(allList.size()).isEqualTo(11);
-
-
         Pageable pageable = PageRequest.of(0, 5);
+        Page<FaqDto> allList = faqRepository.findAll(pageable);
+
+        Assertions.assertThat(allList.getContent().size()).isEqualTo(10);
+
         String keyword = "레디";
         String tag = "WEBSITE";
 
