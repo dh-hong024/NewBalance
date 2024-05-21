@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <style>
+        .active{
+            border: solid black;
+        }
+        ul > li > a{
+            color: black;
+        }
+        li{
+            float: left;
+            list-style: none;
+            padding: 10px;
+            margin: 10px 10px 0 0;
+            cursor: pointer;
+            border: solid #dbdbdb;
+        }
+        .content{
+            margin: 10px;
+        }
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <title>FAQ</title>
+
+</head>
+<body>
+    <div>
+        <h2>FAQs</h2>
+        <div class="form-group">
+            <form action="/board/search" id="searchForm" method="post" onsubmit="searchContents()">
+                <input type="hidden" id="tag" name="tag">
+                <input type="hidden" id="page" name="page">
+                <input type="text" id="condition" name="condition">
+                <button type="submit" id="submitBtn">검색</button>
+            </form>
+        </div>
+        <div>
+            <ul class="tabs">
+                <input type="hidden" th:value="${tag}">
+                <input type="hidden" id="condition-hidden" th:value="${condition}">
+                <li class="tab-item" id="all" data-tab="tab-1"><a href="#">전체</a></li>
+                <li class="tab-item" id="website" data-tab="tab-2"><a href="#">웹사이트</a></li>
+                <li class="tab-item" id="mileage" data-tab="tab-3"><a href="#">통합 마일리지</a></li>
+                <li class="tab-item" id="repair" data-tab="tab-4" ><a href="#">수선(A/S)</a></li>
+                <li class="tab-item" id="store" data-tab="tab-5" ><a href="#">매장 관련</a></li>
+                <li class="tab-item" id="product" data-tab="tab-6" ><a href="#">제품</a></li>
+                <li class="tab-item" id="members" data-tab="tab-7" ><a href="#">멤버스</a></li>
+                <li class="tab-item" id="return" data-tab="tab-8" ><a href="#">교환/반품</a></li>
+            </ul>
+        </div>
+        <br><br><br>
+        <div class="contents">
+            <div class="content" th:each="content : ${contents}">
+                <div class="question">
+                    <p th:text="${content.getQuestion()}"></p>
+                </div>
+                <div class="answer">
+                    <p th:text="${content.getAnswer()}"></p>
+                </div>
+            </div>
+        </div>
+        <div class="paging">
+            <button type="button" onclick="paging()" th:text="더보기"></button>
+        </div>
+    </div>
+
+    <script>
+        let pageNumber = 0;
+        $(document).ready(function() {
+            let resTag = $("ul.tabs input").val();
+            let keyword = $("#condition-hidden").val();
+            $("#condition").val(keyword);
+
+            //탭 이동
+            $('li').removeClass('active');
+            switch (resTag) {
+                case "ALL":
+                    $("#all").addClass("active");
+                    break;
+                case "WEBSITE":
+                    $("#website").addClass("active");
+                    break;
+                case "MILEAGE":
+                    $("#mileage").addClass("active");
+                    break;
+                case "REPAIR":
+                    $("#repair").addClass("active");
+                    break;
+                case "STORE":
+                    $("#store").addClass("active");
+                    break;
+                case "PRODUCT":
+                    $("#product").addClass("active");
+                    break;
+                case "MEMBERS":
+                    $("#members").addClass("active");
+                    break;
+                case "RETURN":
+                    $("#return").addClass("active");
+                    break;
+                default:
+                    $("#all").addClass("active");
+                    break;
+            }
+
+            //li 클릭이벤트로 폼 전송
+            $('ul.tabs li').click(function(){
+                //클래스 수정
+                $('li').removeClass('active');
+                $(this).addClass('active');
+
+                //submit 버튼 클릭
+                $("#submitBtn").click();
+            })
+        });
+
+        function searchContents() {
+            let tag = document.getElementsByClassName("active")[0].getAttribute("id").toUpperCase();
+            console.log(tag);
+            $("#tag").val(tag);
+            $("#page").val(pageNumber);
+            $("#searchForm").submit();
+        }
+
+
+    </script>
+</body>
+</html>
