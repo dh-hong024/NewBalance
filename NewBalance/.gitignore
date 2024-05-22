@@ -171,4 +171,6 @@ gradle-app.setting
 ## 로컬 설정 관리제외
 application-local.yml
 
+/src/main/generated/**
+
 # End of https://www.toptal.com/developers/gitignore/api/windows,java,gradle,intellij+all
