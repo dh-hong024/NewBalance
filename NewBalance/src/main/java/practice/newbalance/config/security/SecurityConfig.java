@@ -19,8 +19,8 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
         http
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/","/members/**").permitAll() //해당 경로는 인증 없이 접근 가능
-                        .requestMatchers("/admin").hasRole("ADMIN") //해당 경로는 인증이 필요 ROLE이 ADMIN이 포함된 경우에만 인증 가능
+                        .requestMatchers("/","/members/**","/notice/**","/notice","/api/**").permitAll() //해당 경로는 인증 없이 접근 가능
+                        .requestMatchers("/admin","/notice/notice-form","/notice/notice-detail", "/notice/edit-form").hasRole("ADMIN") //해당 경로는 인증이 필요 ROLE이 ADMIN이 포함된 경우에만 인증 가능
                         .requestMatchers("/my/**").hasAnyRole("ADMIN","USER") //마이페이지 ROLE이 ADMIN과 USER 일 경우 가능
                         .anyRequest().authenticated()
                 );
@@ -29,7 +29,7 @@ public class SecurityConfig {
                         .loginPage("/members/login") //로그인 페이지 설정
                         .usernameParameter("userId") //Spring Security default Parameter = username 이기 때문에 userId 명시해줘야함
                         .passwordParameter("password")
-                        .loginProcessingUrl("/login/loginProc") // 로그인 처리 URL 설정
+                        .loginProcessingUrl("/login/login-proc") // 로그인 처리 URL 설정
 //                        .defaultSuccessUrl("/") // 로그인 성공 후 이동할 페이지 successHandler로 우선순위 밀려 주석처리
                         .successHandler(new MemberAuthSuccessHandler()) //로그인 성공 후 처리할 핸들러
                         .failureHandler(new MemberAuthFailHandler()) // 로그인 실패 후 처리할 핸들러

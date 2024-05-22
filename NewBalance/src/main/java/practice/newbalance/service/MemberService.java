@@ -28,6 +28,10 @@ public class MemberService {
 //            return null;
 //        }
 
+        if(memberDto.getUserId().equals("admin")){
+            return memberRepository.save(memberDto.toEntity(bCryptPasswordEncoder, "ROLE_ADMIN")).getId();
+        }
+
         return memberRepository.save(memberDto.toEntity(bCryptPasswordEncoder, "ROLE_USER")).getId();
     }
 

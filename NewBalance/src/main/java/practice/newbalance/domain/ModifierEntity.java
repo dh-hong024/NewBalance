@@ -7,6 +7,7 @@ import lombok.Getter;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 
@@ -16,10 +17,11 @@ import java.time.LocalDateTime;
 public class ModifierEntity extends BaseEntity{
 
     @LastModifiedBy
-    @Column(name = "modified_by", updatable = false)
+    @Column(name = "modified_by")
     private String modifiedBy;
 
     @LastModifiedDate
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(name = "modified_date")
     private LocalDateTime modifiedDate;
 }
