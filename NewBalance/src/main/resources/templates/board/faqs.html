@@ -1,5 +1,6 @@
 <!doctype html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
@@ -32,7 +33,7 @@
     <div>
         <h2>FAQs</h2>
         <div class="form-group">
-            <form action="/board/faqs" id="searchForm" method="get" onsubmit="searchContents()">
+            <form action="/faqs" id="searchForm" method="get" onsubmit="searchContents()">
                 <input type="hidden" id="tag" name="tag">
                 <input type="hidden" id="page" name="page">
                 <input type="text" id="condition" name="condition">
@@ -40,6 +41,7 @@
             </form>
         </div>
         <div>
+            <a href="" sec:authorize="hasRole('ROLE_ADMIN')">글쓰기</a>
             <ul class="tabs">
                 <input type="hidden" th:value="${tag}">
                 <input type="hidden" id="condition-hidden" th:value="${condition}">
@@ -100,7 +102,7 @@
 
         function searchContents() {
             let tag = document.getElementsByClassName("active")[0].getAttribute("id").toUpperCase();
-            console.log(tag);
+
             $("#tag").val(tag);
             $("#page").val(pageNumber);
             $("#searchForm").submit();
@@ -109,7 +111,7 @@
         function paging(){
             pageNumber++;
 
-            $.get('/board/api/faqs', {
+            $.get('/api/faqs', {
                 page : pageNumber,
                 condition : $("#condition").val(),
                 tag : document.getElementsByClassName("active")[0].getAttribute("id").toUpperCase()
@@ -117,8 +119,6 @@
                 .done(data => {
                     let contents = data.contents;
                     let count = data.count;
-                    console.log(contents);
-                    console.log(count);
                     let divContents = $("div.contents");
                     contents.forEach(content => {
                         divContents.append(
@@ -173,8 +173,6 @@
                     break;
             }
         }
-
-
     </script>
 </body>
 </html>
