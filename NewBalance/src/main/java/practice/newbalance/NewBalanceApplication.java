@@ -1,5 +1,6 @@
 package practice.newbalance;
 
+import jakarta.servlet.http.HttpSession;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -17,11 +18,9 @@ public class NewBalanceApplication {
         SpringApplication.run(NewBalanceApplication.class, args);
     }
 
-    // TODO : 임시 UUID를 디비에 저장하는 방식을
-    //  추후 세션에서 아이디를 꺼내서 DB에 저장하는 방식으로 변경 예정
     @Bean
-    public AuditorAware<String> auditorProvider(){
-        return () -> Optional.of(UUID.randomUUID().toString());
+    public AuditorAware<String> auditorProvider(HttpSession session){
+        return () -> Optional.of(session.getAttribute("principal").toString());
     }
 
 }
