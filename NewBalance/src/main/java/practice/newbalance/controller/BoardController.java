@@ -6,7 +6,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import practice.newbalance.domain.board.Notice;
 import practice.newbalance.dto.board.FaqDto;
+import practice.newbalance.dto.board.NoticeDto;
 import practice.newbalance.service.board.FaqServiceImpl;
 
 import java.util.HashMap;
@@ -15,6 +17,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
+import practice.newbalance.service.board.NoticeService;
+
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -31,7 +36,7 @@ public class BoardController {
             @RequestParam(value = "tag", required = false) String tag,
             @RequestParam(value = "page", defaultValue = "0") int page,
             Model model
-    ){
+    ) {
         //todo: 설정 값으로 대체 예정
         int limit = 3;
         boolean isSearch = tag != null;
@@ -64,7 +69,7 @@ public class BoardController {
             @RequestParam(value = "tag", required = false) String tag,
             @RequestParam(value = "page", defaultValue = "0") int page,
             Model model
-    ){
+    ) {
         //todo: 설정 값으로 대체 예정
         int limit = 3;
         boolean isSearch = tag != null;
@@ -91,13 +96,11 @@ public class BoardController {
     }
 
 
-
     /**
      * 공지사항 리스트
      * https://jojoldu.tistory.com/528 더보기페이징참고
      * https://velog.io/@arnold_99/%ED%8E%98%EC%9D%B4%EC%A7%95-%EA%B8%B0%EB%8A%A5-%EA%B5%AC%ED%98%84
      * https://cattaku.tistory.com/10
-     *
      */
     @GetMapping(value = "/notice")
     public String getNotices(Model model,
@@ -132,6 +135,7 @@ public class BoardController {
 
     /**
      * 공지사항 등록 페이지 이동
+     *
      * @param model
      * @return
      */
@@ -140,7 +144,7 @@ public class BoardController {
     public String noticeForm(Authentication authentication,
                              Model model) {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        model.addAttribute("author",userDetails.getUsername());
+        model.addAttribute("author", userDetails.getUsername());
         model.addAttribute("noticeDto", new NoticeDto());
 
         return "/board/noticeForm";
@@ -148,11 +152,12 @@ public class BoardController {
 
     /**
      * 공지사항 등록
+     *
      * @param noticeDto
      * @return
      */
     @PostMapping(value = "/notice/add-notice")
-    public String noticeAdd(NoticeDto noticeDto){
+    public String noticeAdd(NoticeDto noticeDto) {
 
         noticeService.saveNotice(noticeDto);
 
@@ -167,7 +172,7 @@ public class BoardController {
     public String detailNoticeForm(@PathVariable("noticeId") Long noticeId,
                                    HttpServletRequest request,
                                    HttpServletResponse response,
-                                   Model model){
+                                   Model model) {
 
         Notice noticeDto = noticeService.findNoticeById(noticeId);
         noticeService.updateCount(noticeId, request, response);
@@ -180,7 +185,7 @@ public class BoardController {
      * 공지사항 수정 폼
      */
     @GetMapping(value = "/notice/edit-form/{noticeId}")
-    public String editNoticeForm(@PathVariable("noticeId") Long noticeId,Model model){
+    public String editNoticeForm(@PathVariable("noticeId") Long noticeId, Model model) {
 
         Notice noticeDto = noticeService.findNoticeById(noticeId);
         model.addAttribute("noticeDto", noticeDto);
@@ -189,10 +194,10 @@ public class BoardController {
     }
 
     /**
-     *공지사항 글 수정
+     * 공지사항 글 수정
      */
     @PostMapping(value = "/notice/edit/{noticeId}")
-    public String updateNotice(@PathVariable("noticeId") Long noticeId, @ModelAttribute("noticeDto") NoticeDto noticeDto){
+    public String updateNotice(@PathVariable("noticeId") Long noticeId, @ModelAttribute("noticeDto") NoticeDto noticeDto) {
 
         noticeService.updateNotice(noticeId, noticeDto);
 
@@ -203,9 +208,10 @@ public class BoardController {
      * 공지사항 글 삭제
      */
     @GetMapping(value = "/notice/delete/{noticeId}")
-    public String deleteNotice(@PathVariable("noticeId") Long noticeId){
+    public String deleteNotice(@PathVariable("noticeId") Long noticeId) {
 
         noticeService.deleteNotice(noticeId);
 
         return "redirect:/notice";
     }
+}
