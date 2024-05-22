@@ -25,7 +25,7 @@ public class QModifierEntity extends EntityPathBase<ModifierEntity> {
     public final StringPath createdBy = _super.createdBy;
 
     //inherited
-    public final StringPath createdDate = _super.createdDate;
+    public final DateTimePath<java.time.LocalDateTime> createdDate = _super.createdDate;
 
     public final StringPath modifiedBy = createString("modifiedBy");
 
