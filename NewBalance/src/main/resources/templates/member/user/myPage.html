@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="/css/common/common.css">
+    <link rel="stylesheet" href="/css/member/mypage.css">
+    <title>Document</title>
+</head>
+<body>
+
+<div class="container">
+    <strong style="font-size: 60px;">MY</strong>
+    <div class="my_wrap">
+        <div class="grade-family-left">
+            <p><strong th:text="아무개"></strong>님 |  <a href="#">등급혜택 > </a></p>
+            <h2><a href="">NB FAMILY</a></h2>
+            <p id="gradeComment">2024 멤버스위크 등급부스팅<br>기간 내 구매금액 : 0원<br>등급 부스팅 인정금액 : 0원</p>
+            <a href="/members/logout" sec:authorize="isAuthenticated()">로그아웃</a>
+        </div>
+        <div class="grade-family-right">
+            <ul>
+                <li><strong>쿠폰</strong><h1><a href="#">0</a></h1></li>
+                <li><strong>마일리지</strong><h1><a href="#">0</a></h1></li>
+                <li><strong>관심상품</strong><h1><a href="#">0</a></h1></li>
+                <li><strong>주문/배송</strong><h1><a href="#">0</a></h1></li>
+            </ul>
+        </div>
+
+        <div class="my-menu">
+            <div class="link-div">
+                <div class="link-header">
+                    <strong>상품내역</strong>
+                </div>
+                <div class="link-body">
+                    <p><a href="">관심상품</a></p>
+                    <p><a href="">오늘 본 상품</a></p>
+                </div>
+            </div>
+            <div class="link-div">
+                <div class="link-header">
+                    <strong>구매내역</strong>
+                </div>
+                <div class="link-body">
+                    <p><a href="">주문/배송 조회</a></p>
+                    <p><a href="">취소/반품 내역</a></p>
+                    <p><a href="">상품 리뷰</a></p>
+                </div>
+            </div>
+            <div class="link-div">
+                <div class="link-header">
+                    <strong>Q&A</strong>
+                </div>
+                <div class="link-body">
+                    <p><a href="/faqs">FAQ</a></p>
+                </div>
+            </div>
+            <div class="link-div">
+                <div class="link-header">
+                    <strong>MY NB</strong>
+                </div>
+                <div class="link-body">
+                    <p><a href="">회원등급</a></p>
+                    <p><a href="">쿠폰</a></p>
+                </div>
+            </div>
+            <div class="link-div">
+                <div class="link-header">
+                    <strong>계정관리</strong>
+                </div>
+                <div class="link-body">
+                    <p><a href="">회원정보 확인/수정</a></p>
+                    <p><a href="">배송지 관리</a></p>
+                    <p><a href="">환불계좌 관리</a></p>
+                    <p><a href="">결제수단 관리</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
