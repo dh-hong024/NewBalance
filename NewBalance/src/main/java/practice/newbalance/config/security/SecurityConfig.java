@@ -19,7 +19,7 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
         http
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/","/members/**", "/faqs/**","/notice/**","/notice","/api/**").permitAll() //해당 경로는 인증 없이 접근 가능
+                        .requestMatchers("/","/members/**", "/faqs/**","/notice/**","/notice","/api/**", "/css/**").permitAll() //해당 경로는 인증 없이 접근 가능
                         .requestMatchers("/admin","/notice/notice-form","/notice/notice-detail", "/notice/edit-form").hasRole("ADMIN") //해당 경로는 인증이 필요 ROLE이 ADMIN이 포함된 경우에만 인증 가능
                         .requestMatchers("/my/**").hasAnyRole("ADMIN","USER") //마이페이지 ROLE이 ADMIN과 USER 일 경우 가능
                         .anyRequest().authenticated()
