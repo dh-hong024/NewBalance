@@ -1,22 +1,24 @@
 <!doctype html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{common/config/defaultLayout}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+<!--    <link rel="stylesheet" type="text/css" th:href="@{/css/common/common.css}">-->
     <title>Document</title>
 </head>
 <body>
-<h1>메인페이지</h1>
-<a href="/members/join">회원가입</a><br>
-<a href="/members/login" sec:authorize="isAnonymous()">로그인</a><br>
-<a href="/members/inquiry">아이디/비밀번호 찾기</a><br>
-<a href="/notice">공지사항</a><br>
-<a href="/faqs">faq</a><br>
+<!--<header th:replace="~{common/config/navbar::headerFragment}"></header>-->
+<div class="container" layout:fragment="content">
+<h1>asdasd</h1>
+</div>
+<!--<footer th:replace="~{common/config/footer::footer}"></footer>-->
 
-<a href="/my" sec:authorize="hasRole('ROLE_USER')">마이페이지</a>
 
 </body>
 </html>

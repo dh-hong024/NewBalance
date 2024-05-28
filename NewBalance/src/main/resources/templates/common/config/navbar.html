@@ -1,0 +1,37 @@
+<!doctype html>
+    <html xmlns:th="http://www.thymeleaf.org"
+          xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+          th:fragment="header">
+        <div class="nav" th:fragment="headerFragment">
+            <div class="nav-inner">
+                <ul>
+                    <li><strong><a href="">공지사항</a></strong></li>
+                    <li><strong><a href="">faq</a></strong></li>
+                    <li sec:authorize="hasRole('ROLE_USER')"><strong><a href="">관심상품</a></strong></li>
+                    <li sec:authorize="hasRole('ROLE_USER')"><strong><a href="">오늘 본 상품</a></strong></li>
+
+
+
+                </ul>
+            </div>
+            <div class="menu">
+                <ul>
+                    <li><a href="/">NB</a></li>
+                    <li><a href="">Men</a></li>
+                    <li><a href="">Women</a></li>
+                    <li><a href="" style="margin-left: 60px;">Kids</a></li>
+
+                </ul>
+            </div>
+            <div class="gnb">
+                <ul>
+                    <li><a href="/members/inquiry">장바구니</a></li>
+                    <li sec:authorize="hasRole('ROLE_ADMIN')"><a href="/admin-page">관리자페이지</a></li>
+                    <li sec:authorize="hasRole('ROLE_ADMIN')"><a href="/members/logout" sec:authorize="isAuthenticated()">로그아웃</a></li>
+                    <li sec:authorize="hasRole('ROLE_USER')"><a href="/my">마이페이지</a></li>
+                    <li sec:authorize="isAnonymous()"><a href="/members/login">로그인</a> | <a href="/members/join">회원가입</a></li>
+                    <li><a href="/notice">검색</a></li>
+                </ul>
+            </div>
+        </div>
+</html>
