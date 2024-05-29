@@ -10,7 +10,7 @@
 
 <div class="container">
 
-    <form th:action="@{/notice/add-notice}" th:object="${noticeDto}" method="post">
+    <form th:action="@{/admin/add-notice}" th:object="${noticeDto}" method="post">
         <div class="form-group">
             <label th:for="noticeTitle">제목</label>
             <input type="text" th:field="*{noticeTitle}" class="form-control" placeholder="제목을 입력하세요">
@@ -31,7 +31,7 @@
         </div>
         <button type="submit" class="btn btn-primary">등록</button>
     </form>
-    <button th:onclick="|location.href='@{/notice}'|">취소</button>
+    <button th:onclick="|location.href='@{/admin-page}'|">취소</button>
     <br/>
 
 </div>

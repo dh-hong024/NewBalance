@@ -8,10 +8,7 @@ import practice.newbalance.domain.member.Member;
 import practice.newbalance.dto.member.MemberDto;
 import practice.newbalance.repository.MemberRepository;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -21,12 +18,6 @@ public class MemberService {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public Long join(MemberDto memberDto) {
-
-        //db에 이미 동일한 userId를 가진 회원이 존재하는지 검증
-//        boolean isUser = memberRepository.existsByUserId(memberDto.getUserId());
-//        if(isUser) {
-//            return null;
-//        }
 
         if(memberDto.getUserId().equals("admin")){
             return memberRepository.save(memberDto.toEntity(bCryptPasswordEncoder, "ROLE_ADMIN")).getId();
@@ -71,7 +62,11 @@ public class MemberService {
         return result;
     }
 
+    public List<MemberDto> findMemberAll(int offset, int limit){
+        return memberRepository.findMemberAll(offset, limit);
+    }
 
-
-
+    public long getMemberCount(){
+        return memberRepository.count();
+    }
 }

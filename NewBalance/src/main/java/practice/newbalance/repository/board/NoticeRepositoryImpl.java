@@ -4,7 +4,6 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import practice.newbalance.domain.board.Notice;
 import practice.newbalance.dto.board.NoticeDto;
 
 import java.util.List;
@@ -24,6 +23,7 @@ public class NoticeRepositoryImpl implements NoticeRepositoryCustom {
                 NoticeDto.class,
                 notice.id,
                 notice.noticeTitle,
+                notice.noticeContent,
                 notice.noticeCount,
                 notice.modifiedDate
                         ))

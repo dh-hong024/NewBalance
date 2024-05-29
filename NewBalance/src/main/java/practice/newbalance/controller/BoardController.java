@@ -47,8 +47,8 @@ public class BoardController {
 
         long dataCnt = (
                 isSearch ?
-                        faqService.getSearchCount(condition, tag) - ((page + 1) * limit) :
-                        faqService.getFaqCount() - ((page + 1) * limit)
+                        faqService.getSearchCount(condition, tag) - ((long) (page + 1) * limit) :
+                        faqService.getFaqCount() - ((long) (page + 1) * limit)
         );
 
         log.info("contents = {}, page = {}, count = {}", faqList.getContent(), page, dataCnt);
@@ -79,8 +79,8 @@ public class BoardController {
 
         long dataCnt = (
                 isSearch ?
-                        faqService.getSearchCount(condition, tag) - ((page + 1) * limit) :
-                        faqService.getFaqCount() - ((page + 1) * limit)
+                        faqService.getSearchCount(condition, tag) - ((long) (page + 1) * limit) :
+                        faqService.getFaqCount() - ((long) (page + 1) * limit)
         );
 
         log.info("contents = {}, page = {}, count = {}", faqList.getContent(), page, dataCnt);
@@ -98,9 +98,7 @@ public class BoardController {
 
     /**
      * 공지사항 리스트
-     * https://jojoldu.tistory.com/528 더보기페이징참고
-     * https://velog.io/@arnold_99/%ED%8E%98%EC%9D%B4%EC%A7%95-%EA%B8%B0%EB%8A%A5-%EA%B5%AC%ED%98%84
-     * https://cattaku.tistory.com/10
+     * 더보기 페이징
      */
     @GetMapping(value = "/notice")
     public String getNotices(Model model,
@@ -131,37 +129,6 @@ public class BoardController {
         response.put("totalNotices", totalNotices);
 
         return response;
-    }
-
-    /**
-     * 공지사항 등록 페이지 이동
-     *
-     * @param model
-     * @return
-     */
-//    @GetMapping(value = "/notice/noticeForm")
-    @GetMapping(value = "/notice/notice-form")
-    public String noticeForm(Authentication authentication,
-                             Model model) {
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        model.addAttribute("author", userDetails.getUsername());
-        model.addAttribute("noticeDto", new NoticeDto());
-
-        return "/board/noticeForm";
-    }
-
-    /**
-     * 공지사항 등록
-     *
-     * @param noticeDto
-     * @return
-     */
-    @PostMapping(value = "/notice/add-notice")
-    public String noticeAdd(NoticeDto noticeDto) {
-
-        noticeService.saveNotice(noticeDto);
-
-        return "redirect:/notice";
     }
 
     /**
@@ -213,5 +180,35 @@ public class BoardController {
         noticeService.deleteNotice(noticeId);
 
         return "redirect:/notice";
+    }
+
+    /**
+     * 공지사항 등록 페이지 이동
+     *
+     * @param model
+     * @return
+     */
+    @GetMapping(value = "/admin/notice-form")
+    public String noticeForm(Authentication authentication,
+                             Model model) {
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        model.addAttribute("author", userDetails.getUsername());
+        model.addAttribute("noticeDto", new NoticeDto());
+
+        return "/board/noticeForm";
+    }
+
+    /**
+     * 공지사항 등록
+     *
+     * @param noticeDto
+     * @return
+     */
+    @PostMapping(value = "/admin/add-notice")
+    public String noticeAdd(NoticeDto noticeDto) {
+
+        noticeService.saveNotice(noticeDto);
+
+        return "redirect:/admin-page";
     }
 }

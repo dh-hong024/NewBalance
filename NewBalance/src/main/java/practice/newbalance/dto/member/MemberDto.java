@@ -1,5 +1,6 @@
 package practice.newbalance.dto.member;
 
+import com.querydsl.core.annotations.QueryProjection;
 import jakarta.persistence.Column;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -8,6 +9,7 @@ import lombok.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import practice.newbalance.domain.member.Member;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -110,5 +112,14 @@ public class MemberDto {
                 .role(role)
                 .build();
         return member;
+    }
+
+    @QueryProjection
+    public MemberDto(String userId, String name, String sex, String email, String role){
+        this.userId = userId;
+        this.name = name;
+        this.sex = sex;
+        this.email = email;
+        this. role = role;
     }
 }

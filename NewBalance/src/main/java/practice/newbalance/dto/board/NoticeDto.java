@@ -3,8 +3,6 @@ package practice.newbalance.dto.board;
 
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.*;
-import practice.newbalance.domain.BaseEntity;
-import practice.newbalance.domain.ModifierEntity;
 import practice.newbalance.domain.board.Notice;
 
 import java.time.LocalDateTime;
@@ -26,19 +24,20 @@ public class NoticeDto {
 
 
     public Notice toEntity() {
-        Notice member = Notice.builder()
+        Notice notice = Notice.builder()
                 .id(id)
                 .noticeTitle(noticeTitle)
                 .noticeContent(noticeContent)
                 .noticeCount(noticeCount)
                 .build();
-        return member;
+        return notice;
     }
 
     @QueryProjection
-    public NoticeDto(Long id, String noticeTitle, int noticeCount, LocalDateTime modifiedDate) {
+    public NoticeDto(Long id, String noticeTitle, String noticeContent ,int noticeCount, LocalDateTime modifiedDate) {
         this.id = id;
         this.noticeTitle = noticeTitle;
+        this.noticeContent = noticeContent;
         this.noticeCount = noticeCount;
         this.modifiedDate = modifiedDate;
     }

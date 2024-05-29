@@ -1,0 +1,245 @@
+package practice.newbalance.controller;
+
+import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+import practice.newbalance.domain.board.FaqTag;
+import practice.newbalance.domain.board.Notice;
+import practice.newbalance.dto.board.FaqDto;
+import practice.newbalance.dto.board.NoticeDto;
+import practice.newbalance.dto.member.MemberDto;
+import practice.newbalance.service.MemberService;
+import practice.newbalance.service.board.FaqServiceImpl;
+import practice.newbalance.service.board.NoticeService;
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+@Controller
+public class AdminController {
+
+    private final NoticeService noticeService;
+    private final MemberService memberService;
+    private final FaqServiceImpl faqService;
+    public AdminController(NoticeService noticeService, MemberService memberService, FaqServiceImpl faqService) {
+        this.noticeService = noticeService;
+        this.memberService = memberService;
+        this.faqService = faqService;
+    }
+
+    @GetMapping("/admin-page")
+    public String adminPage(){
+
+        return "/admin/adminPage";
+    }
+
+
+    /**
+     * 공지사항 list출력
+     * @param offset
+     * @param limit
+     * @return
+     */
+    @GetMapping(value = "/admin/notices")
+    @ResponseBody
+    public Map<String, Object> adminNoticePage(
+            @RequestParam(name = "offset", defaultValue = "0") int offset,
+            @RequestParam(name = "limit", defaultValue = "10") int limit){
+
+        List<NoticeDto> notices = noticeService.getNotice(offset, limit);
+        long totalNotices = noticeService.getNoticeCount();
+
+        Map<String, Object> response = new HashMap<>();
+
+        response.put("notices", notices);
+        response.put("totalNotices", totalNotices);
+
+        return response;
+    }
+
+    @GetMapping("/admin/faqsList")
+    @ResponseBody
+    public Map<String, Object> FaqList(
+            @RequestParam(value = "condition", required = false) String condition,
+            @RequestParam(value = "tag", required = false) String tag,
+            @RequestParam(value = "page", defaultValue = "0") int page) {
+
+        //todo: 설정 값으로 대체 예정
+        int limit = 3;
+        boolean isSearch = tag != null;
+
+        Page<FaqDto> faqList = isSearch ?
+                faqService.findAll(page, limit, condition, tag) :
+                faqService.findAll(page, limit);
+
+        long dataCnt = (
+                isSearch ?
+                        faqService.getSearchCount(condition, tag) - ((long) (page + 1) * limit) :
+                        faqService.getFaqCount() - ((long) (page + 1) * limit)
+        );
+
+        Map<String, Object> response = new HashMap<>();
+
+        response.put("contents", faqList.getContent());
+        response.put("page", page);
+        response.put("count", dataCnt <= 0 ? 0 : dataCnt);
+        response.put("tag", tag);
+        response.put("condition", condition);
+
+        return response;
+    }
+
+    @GetMapping("/admin/api/faqs")
+    @ResponseBody
+    public Map<String, Object> getContents(
+            @RequestParam(value = "condition", required = false) String condition,
+            @RequestParam(value = "tag", required = false) String tag,
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            Model model
+    ) {
+        //todo: 설정 값으로 대체 예정
+        int limit = 3;
+        boolean isSearch = tag != null;
+        Page<FaqDto> faqList = isSearch ?
+                faqService.findAll(page, limit, condition, tag) :
+                faqService.findAll(page, limit);
+
+        long dataCnt = (
+                isSearch ?
+                        faqService.getSearchCount(condition, tag) - ((long) (page + 1) * limit) :
+                        faqService.getFaqCount() - ((long) (page + 1) * limit)
+        );
+
+
+        Map<String, Object> data = new HashMap<>();
+        data.put("contents", faqList.getContent());
+        data.put("page", page);
+        data.put("count", dataCnt <= 0 ? 0 : dataCnt);
+        data.put("tag", tag);
+        data.put("condition", condition);
+
+        return data;
+    }
+
+    /**
+     * faq Enum 데이터 SelectBox로 로드
+     * @return
+     */
+    @GetMapping("/admin/faqTagList")
+    @ResponseBody
+    public List<Map<String, String>> FaqTagController(){
+        return Arrays.stream(FaqTag.values())
+                .map(faqTag -> Map.of("value", faqTag.name(), "tagName", faqTag.getTagName()))
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * faq 등록
+     */
+    @PostMapping("/admin/faqEdit")
+    public ResponseEntity<String> createFaq(@RequestBody FaqDto faqDto) {
+        faqService.saveFaq(faqDto);
+        return ResponseEntity.ok("등록완료");
+    }
+
+
+    /**
+     * admin페이지 faq modal페이지에서 글 수정
+     * @param faqId
+     * @return
+     */
+    @PutMapping(value = "/admin/faqEdit/{faqId}")
+    public ResponseEntity<String> updateFaq(@PathVariable("faqId") Long faqId,
+                                               @RequestBody FaqDto faqDto) {
+        try{
+            faqService.updateFaq(faqId, faqDto);
+            return ResponseEntity.ok("success");
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("fail");
+        }
+    }
+
+    /**
+     * admin페이지 faq modal페이지에서 글 삭제
+     * @param faqId
+     * @return
+     */
+    @DeleteMapping(value = "/admin/faqDelete/{faqId}")
+    public ResponseEntity<String> deleteFaq(@PathVariable("faqId") Long faqId){
+        try{
+            faqService.deleteFaq(faqId);
+            return ResponseEntity.ok("success");
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("fail");
+        }
+    }
+
+    /**
+     * 공지사항 상세 폼
+     */
+    @GetMapping(value = "/admin/notice-detail/{noticeId}")
+    public String detailNoticeForm(@PathVariable("noticeId") Long noticeId,
+                                   Model model) {
+
+        Notice noticeDto = noticeService.findNoticeById(noticeId);
+        model.addAttribute("noticeDto", noticeDto);
+
+        return "/board/noticeDetail";
+    }
+
+    /**
+     * admin페이지 공지사항 modal페이지에서 글 수정
+     * @param noticeId
+     * @return
+     */
+    @PostMapping(value = "/admin/noticeEdit/{noticeId}")
+    public ResponseEntity<String> updateNotice(@PathVariable("noticeId") Long noticeId,
+                                               @RequestBody NoticeDto noticeDto) {
+        try{
+            noticeService.updateNotice(noticeId, noticeDto);
+            return ResponseEntity.ok("success");
+        }catch (Exception e){
+         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("fail");
+        }
+    }
+
+    /**
+     * admin페이지 공지사항 modal페이지에서 글 삭제
+     * @param noticeId
+     * @return
+     */
+    @DeleteMapping(value = "/admin/noticeDelete/{noticeId}")
+    public ResponseEntity<String> deleteNotice(@PathVariable("noticeId") Long noticeId){
+        try{
+            noticeService.deleteNotice(noticeId);
+            return ResponseEntity.ok("success");
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("fail");
+        }
+    }
+
+    /**
+     * 회원list
+     */
+    @GetMapping("/admin/membersList")
+    @ResponseBody
+    public Map<String, Object> membersList(
+            @RequestParam(value = "offset", defaultValue = "0") int offset,
+            @RequestParam(value = "limit", defaultValue = "10") int limit){
+
+        List<MemberDto> members = memberService.findMemberAll(offset, limit);
+        long totalMembers = memberService.getMemberCount();
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("members", members);
+        response.put("totalMembers", totalMembers);
+
+        return response;
+    }
+}
