@@ -1,13 +1,15 @@
 package practice.newbalance.domain.board;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import practice.newbalance.domain.ModifierEntity;
 
 @Entity
 @Getter @Setter
+@Builder
 @Table(name = "FAQ")
+@AllArgsConstructor
+@NoArgsConstructor
 public class Faqs extends ModifierEntity {
 
     @Id @GeneratedValue

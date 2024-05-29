@@ -8,4 +8,5 @@ import java.util.List;
 public interface FaqService {
     Page<FaqDto> findAll(int page, int limit);
     Page<FaqDto> findAll(int page, int limit, String condition, String tag);
+
 }

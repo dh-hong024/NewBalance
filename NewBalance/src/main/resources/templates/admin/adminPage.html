@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<style>
+    .menu .hide{
+        display: none;
+    }
+
+    .menu a{
+        cursor: pointer;
+    }
+    .modal{
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.4);
+    }
+    .modal-content {
+        background-color: #fefefe;
+        margin: 15% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%;
+    }
+    .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+    .close:hover,
+    .close:focus {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+    }
+    #noticesTable, #noticeEdit, #loadNoticeMore, #membersTable, #loadMemberMore, #faqsDivList {
+        display: none;
+    }
+
+    .tabs > .tab-item > a{
+        color: black;
+    }
+    .tabs > .tab-item {
+        float: left;
+        list-style: none;
+        padding: 10px;
+        margin: 10px 10px 0 0;
+        cursor: pointer;
+        border: solid #dbdbdb;
+    }
+</style>
+<h2>관리자페이지</h2>
+<!-- 메뉴 토글 시작 -->
+<div>
+    <ul>
+        <li class="menu">
+            <a>게시판관리</a>
+            <ul class="hide">
+                <li><a href="" id="noticeList">공지사항</a></li>
+                <li><a href="" id="faqList">faq</a></li>
+            </ul>
+        </li>
+
+        <li class="menu">
+            <a>회원메뉴</a>
+            <ul class="hide">
+                <li><a href="" id="memberList">회원관리</a></li>
+            </ul>
+        </li>
+    </ul>
+</div>
+<!-- 메뉴 토글 끝 -->
+
+
+<!-- 공지사항 시작-->
+<div>
+    <table id="noticesTable" class="table table-striped">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>제목</th>
+            <th>등록일</th>
+            <th>조회수</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+    </table>
+
+    <button id="noticeEdit" th:onclick="|location.href='@{/admin/notice-form}'|"  sec:authorize="hasRole('ROLE_ADMIN')">글쓰기</button>
+
+    <button id="loadNoticeMore">더보기</button>
+
+    <!-- Notice 모달 창 -->
+    <div id="noticeModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <input type="hidden" id="noticeModalId">
+            <h2><input type="text" id="noticeModalTitle" ></h2>
+            <p><textarea id="noticeModalContent"></textarea></p>
+            <p>조회수: <span id="noticeModalCount"></span></p>
+            <p>수정 날짜: <span id="noticeModalModifiedDate"></span></p>
+            <div>
+                <button id="editNoticeBtn" class="btn btn-primary"  sec:authorize="hasRole('ROLE_ADMIN')">수정</button>
+                <button id="deleteNoticeBtn" class="btn btn-primary"  sec:authorize="hasRole('ROLE_ADMIN')">삭제</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 공지사항 끝 -->
+
+<!-- faqs 시작 -->
+<div id="faqsDivList">
+    <h2>FAQs</h2>
+    <div class="form-group">
+            <input type="hidden" id="tag" name="tag">
+            <input type="hidden" id="page" name="page">
+            <input type="text" id="condition" name="condition">
+            <button type="button" id="submitBtn">검색</button>
+    </div>
+    <div>
+        <a href="" id="faqEditBtn" sec:authorize="hasRole('ROLE_ADMIN')">글쓰기</a>
+
+        <ul class="tabs">
+            <input type="hidden" th:value="${tag}">
+            <input type="hidden" id="condition-hidden" th:value="${condition}">
+            <li class="tab-item" id="all" data-tab="tab-1"><a href="#">전체</a></li>
+            <li class="tab-item" id="website" data-tab="tab-2"><a href="#">웹사이트</a></li>
+            <li class="tab-item" id="mileage" data-tab="tab-3"><a href="#">통합 마일리지</a></li>
+            <li class="tab-item" id="repair" data-tab="tab-4" ><a href="#">수선(A/S)</a></li>
+            <li class="tab-item" id="store" data-tab="tab-5" ><a href="#">매장 관련</a></li>
+            <li class="tab-item" id="product" data-tab="tab-6" ><a href="#">제품</a></li>
+            <li class="tab-item" id="members" data-tab="tab-7" ><a href="#">멤버스</a></li>
+            <li class="tab-item" id="return" data-tab="tab-8" ><a href="#">교환/반품</a></li>
+        </ul>
+    </div>
+    <br><br><br>
+    <div class="contents">
+        <div class="content">
+
+        </div>
+    </div>
+    <div class="paging">
+        <button type="button" id="pagingBtn" th:text="'더보기(' + ${count} + ')'"></button>
+    </div>
+</div>
+<!-- faqs 끝 -->
+
+<!-- faqs Edit Modal 시작 -->
+<div id="faqEditModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <form id="faqModalForm">
+            <select id="tagEditSelect"></select>
+            <p><textarea id="faqEditQuestionModalContent"></textarea></p>
+            <p><textarea id="faqEditAnswerModalContent"></textarea></p>
+            <div>
+                <button type="button" id="editFaqBtn" class="btn btn-primary"  sec:authorize="hasRole('ROLE_ADMIN')">등록</button>
+                <button type="button" id="cancelEditFaqBtn" class="btn btn-primary"  sec:authorize="hasRole('ROLE_ADMIN')">취소</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- faqs Edit Modal 끝 -->
+
+<!-- update Modal 시작 -->
+<div id="faqUpdateModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Update FAQ</h2>
+        <form id="faqUpdateModalForm">
+            <input type="hidden" id="faqUpdateId">
+            <select id="tagUpdateSelect"></select><br>
+            <textarea id="faqUpdateQuestionModalContent"></textarea><br>
+            <textarea id="faqUpdateAnswerModalContent"></textarea><br>
+            <div>
+                <button id="updateFaqBtn" class="btn btn-primary"  sec:authorize="hasRole('ROLE_ADMIN')">수정</button>
+                <button id="deleteFaqBtn" class="btn btn-primary"  sec:authorize="hasRole('ROLE_ADMIN')">삭제</button>
+            </div>
+        </form>
+    </div>
+</div>
+<!-- update Modal 끝 -->
+
+
+<!-- 회원 정보 시작-->
+<div>
+    <table id="membersTable" class="table table-striped">
+        <thead>
+        <tr>
+            <th>아이디</th>
+            <th>이메일</th>
+            <th>닉네임</th>
+            <th>성별</th>
+            <th>권한</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+    </table>
+
+    <button id="loadMemberMore">더보기</button>
+</div>
+<!-- 회원 정보 끝 -->
+
+<script th:inline="javascript">
+    let pageNumber = 0;
+    // function adminSearchContents() {
+    //     let tag = document.getElementsByClassName("active")[0].getAttribute("id").toUpperCase();
+    //
+    //     $("#tag").val(tag);
+    //     $("#page").val(pageNumber);
+    //     $("#searchForm").submit();
+    //
+    // }
+
+    $(document).ready(function () {
+        let offset = 0;
+        const limit = 10;
+
+        // 메뉴 토글
+        $(".menu>a").click(function () {
+            const submenu = $(this).next("ul");
+            if (submenu.is(":visible")) {
+                submenu.slideUp();
+            } else {
+                submenu.slideDown();
+            }
+        });
+
+        // 모달 초기화
+        $('#noticeModal').on('show.bs.modal', function () {
+            $('#noticeModalCount').prop('disable', true);
+            $('#noticeModalModifiedDate').prop('disable', true);
+        });
+
+        // 공지사항 목록 로드
+        function noticeList(append = false) {
+            $.ajax({
+                url: '/admin/notices',
+                type: 'GET',
+                data: {offset: offset, limit: limit},
+                dataType: 'json',
+                success: function (response) {
+                    const noticeTableBody = $('#noticesTable tbody');
+                    if (!append) noticeTableBody.empty();
+                    $.each(response.notices, function (index, notice) {
+                        const row = $('<tr>');
+                        row.html(`
+                            <td>${notice.id}</td>
+                            <td><a href="#" class="notice-link" data-id="${notice.id}" data-noticetitle="${notice.noticeTitle}" data-noticecontent="${notice.noticeContent}" data-modifieddate="${notice.modifiedDate}" data-noticecount="${notice.noticeCount}">${notice.noticeTitle}</a></td>
+                            <td>${formatDate(notice.modifiedDate)}</td>
+                            <td>${notice.noticeCount}</td>
+                        `);
+                        noticeTableBody.append(row);
+                    });
+
+                    $('.notice-link').click(showNoticeModal);
+
+                    const remingCount = Math.max(0, response.totalNotices - (offset + limit));
+                    $('#loadNoticeMore').text('더보기(' + remingCount + ')');
+
+                    // 더보기 버튼 표시 여부 결정
+                    if (remingCount <= 0) {
+                        $('#loadNoticeMore').hide();
+                    } else {
+                        $('#loadNoticeMore').show();
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error fetching notices:', error);
+                }
+            });
+        }// 공지사항 목록 로드 끝
+
+        // 회원목록 로드
+        function memberList(append = false) {
+            $.ajax({
+                url: "/admin/membersList",
+                type: 'GET',
+                data: {offset: offset, limit: limit},
+                dataType: 'json',
+                success: function (response) {
+                    const membersTableBody = $('#membersTable tbody');
+                    if (!append) membersTableBody.empty();
+                    $.each(response.members, function (index, member) {
+                        const row = $('<tr>');
+                        row.html(`
+                            <td>${member.userId}</td>
+                            <td>${member.email}</td>
+                            <td>${member.name}</td>
+                            <td>${member.sex}</td>
+                            <td>${member.role}</td>
+                        `);
+                        membersTableBody.append(row);
+                    });
+                    const remingCount = Math.max(0, response.totalMembers - (offset + limit));
+                    $('#loadMemberMore').text('더보기(' + remingCount + ')');
+                    if (remingCount <= 0) {
+                        $('#loadMemberMore').hide();
+                    } else {
+                        $('#loadMemberMore').show();
+                    }
+                }
+
+            });
+        }// 회원목록 로드 끝
+
+
+        // 공지사항 링크 클릭 모달 핸들러
+        function showNoticeModal(event) {
+            event.preventDefault();
+            const notice = $(this).data();
+
+            $('#noticeModalId').val(notice.id);
+            $('#noticeModalTitle').val(notice.noticetitle);
+            $('#noticeModalContent').val(notice.noticecontent);
+            $('#noticeModalCount').text(notice.noticecount);
+            $('#noticeModalModifiedDate').text(formatDate(notice.modifieddate));
+            $('#noticeModal').show();
+        }
+
+        // 초기 공지사항 목록 로드
+        $('#noticeList').click(function (event) {
+            event.preventDefault();
+            $('#noticesTable, #loadNoticeMore, #noticeEdit').show();
+            $('#membersTable, #loadMemberMore').hide();
+            $('#faqsDivList').hide();
+            noticeList(offset, limit);
+        });
+
+        // 초기 회원정보 목록 로드
+        $('#memberList').click(function (event) {
+            event.preventDefault();
+            $('#membersTable, #loadMemberMore').show();
+            $('#faqsDivList').hide();
+            $('#noticesTable, #loadNoticeMore, #noticeEdit').hide();
+            memberList(offset, limit);
+        });
+
+        // 공지사항 더보기 버튼 클릭 이벤트
+        $('#loadNoticeMore').click(function () {
+            offset += limit;
+            noticeList(offset, limit);
+        });
+
+        // 회원정보 더보기 버튼 클릭 이벤트
+        $('#loadMemberMore').click(function () {
+            offset += limit;
+            memberList(offset, limit);
+        })
+
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+
+        // 공지사항 모달페이지 수정
+        $('#editNoticeBtn').click(function () {
+
+            const noticeId = $('#noticeModalId').val();
+            // 수정할 데이터 객체 생성
+            const updateNoticeData = {
+                noticeTitle: $('#noticeModalTitle').val(),
+                noticeContent: $('#noticeModalContent').val(),
+                noticeCount: $('#noticeModalCount').text()
+            };
+
+            $.ajax({
+                url: "/admin/noticeEdit/" + noticeId,
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(updateNoticeData),
+                success: function (response) {
+                    alert('수정 완료');
+                    // window.location.reload();
+                    noticeList(0, offset + limit);
+                    $('#noticeModal').hide();
+                },
+                error: function (xhr, status, error) {
+                    console.error(error);
+                }
+            });
+        });
+
+        // 공지사항 삭제
+        $('#deleteNoticeBtn').click(function () {
+
+            if (confirm("삭제하시겠습니까?")) {
+                const noticeId = $('#noticeModalId').val();
+
+                $.ajax({
+                    url: '/admin/noticeDelete/' + noticeId,
+                    type: 'DELETE',
+                    success: function (response) {
+                        alert('삭제 완료');
+                        noticeList(0, offset + limit);
+                        $('#noticeModal').hide();
+                    },
+                    error: function (xhr, status, error) {
+                        console.log(error);
+                    }
+                });
+            } else {
+
+            }
+        });
+
+        // 모달 닫기
+        $('.close').click(function () {
+            $('#noticeModal').hide();
+            $('#faqEditModal').hide();
+            $('#faqUpdateModal').hide();
+        });
+
+        $('#cancelEditFaqBtn').click(function () {
+            $('#faqEditModal').hide();
+        });
+
+        $(window).click(function (event) {
+            if (event.target.id === 'noticeModal') {
+                $('#noticeModal').hide();
+            } else if (event.target === $('#faqEditModal')[0]) {
+                $('#faqEditModal').hide();
+            } else if (event.target === $('#faqUpdateModal')[0]) {
+                $('#faqUpdateModal').hide();
+            }
+        });
+
+        // faq 시작
+        // 초기 faq 목록 로드
+        $('#faqList').click(function (event) {
+            event.preventDefault();
+            $('#faqsDivList').show();
+            $('#membersTable, #loadMemberMore').hide();
+            $('#noticesTable, #loadNoticeMore, #noticeEdit').hide();
+            let tag = document.getElementsByClassName("active")[0].getAttribute("id").toUpperCase();
+            loadFaqContent(tag);
+        });
+
+        // faq 글쓰기 모달 selectbox로 데이터가져오기
+        $('#faqEditBtn').click(function (event) {
+            event.preventDefault();
+            $('#faqEditModal').show();
+            loadTagList();
+        });
+
+        // faq SelectBox Tag 목록 로드
+        function loadTagList() {
+            $.ajax({
+                url: '/admin/faqTagList',
+                type: 'GET',
+                success: function (tagList) {
+                    const tagEditSelect = $('#tagEditSelect');
+                    tagEditSelect.empty();
+                    tagList.forEach(tag => {
+                        tagEditSelect.append(new Option(tag.tagName, tag.value))
+                    });
+                },
+                error: function (xhr, status, error) {
+                    log.error('태그 로드 실패' + error);
+                }
+            });
+        }
+
+        // faq 등록
+        $('#editFaqBtn').click(function () {
+            const dataForm = {
+                tag: $('#tagEditSelect').val(),
+                question: $('#faqEditQuestionModalContent').val(),
+                answer: $('#faqEditAnswerModalContent').val()
+            };
+
+            $.ajax({
+                url: '/admin/faqEdit',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(dataForm),
+                success: function (response) {
+                    alert('저장완료');
+                    $('#faqEditModal').hide();
+                    let activeTag = $('.tabs li.active').attr('id').toUpperCase();
+                    loadFaqContent(activeTag, '', pageNumber);
+                },
+                error: function (xhr, status, error) {
+                    console.error('저장실패' + error);
+                }
+            });
+        });
+
+        // faq 수정
+        $('#updateFaqBtn').click(function(event) {
+            event.preventDefault();
+            const faqId = $('#faqUpdateId').val();
+            const updateFaqData = {
+                tag: $('#tagUpdateSelect').val(),
+                question: $('#faqUpdateQuestionModalContent').val(),
+                answer: $('#faqUpdateAnswerModalContent').val()
+            };
+            $.ajax({
+                url: '/admin/faqEdit/' + faqId,
+                type: 'PUT', // PUT으로 변경
+                contentType: 'application/json',
+                data: JSON.stringify(updateFaqData),
+                success: function (response) {
+                    alert('수정완료');
+                    $('#faqUpdateModal').hide();
+                    let activeTag = $('.tabs li.active').attr('id').toUpperCase();
+                    loadFaqContent(activeTag, '', pageNumber);
+                },
+                error: function (xhr, status, error) {
+                    console.error('fsq 수정 실패' + error);
+                }
+            });
+        });
+        // faq 삭제
+        $('#deleteFaqBtn').click(function(event) {
+            event.preventDefault();
+            if (confirm("삭제하시겠습니까?")) {
+                const faqId = $('#faqUpdateId').val();
+                $.ajax({
+                    url: '/admin/faqDelete/' + faqId,
+                    type: 'DELETE',
+                    success: function (response) {
+                        alert('삭제 완료');
+                        $('#faqUpdateModal').hide();
+                        let activeTag = $('.tabs li.active').attr('id').toUpperCase();
+                        loadFaqContent(activeTag, '', 0);
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('fsq 삭제 실패' + error);
+                    }
+                });
+            } else {
+
+            }
+        });
+
+        // faq 시작
+        let resTag = $("ul.tabs input").val();
+        let keyword = $("#condition-hidden").val();
+        $("#condition").val(keyword);
+
+        //탭 이동
+        changeActive(resTag);
+
+        //li 클릭이벤트로 폼 전송
+        $('ul.tabs li').click(function () {
+            pageNumber = 0;
+
+            //클래스 수정
+            $('li').removeClass('active');
+            $(this).addClass('active');
+
+            let tag = $(this).attr('id').toUpperCase();
+            let condtion = $('#condition-hidden').val();
+            $('#submitBtn').click();
+        });
+
+        //검색 버튼 클릭 이벤트
+        $('#submitBtn').click(function () {
+            pageNumber = 0;
+            faqSearchBtn();
+        });
+
+        function loadFaqContent(tag = '', condition = '', page = 0) {
+            $.ajax({
+                url: '/admin/faqsList',
+                method: 'GET',
+                data: {tag: tag.toUpperCase(), condition: condition, page: page},
+                success: function (response) {
+                    const faqDivContents = $('#faqsDivList .contents');
+                    faqDivContents.empty();
+                    $.each(response.contents, function (index, contents) {
+                        const row = $('<div>');
+                        row.html(`
+                            <div class="content">
+                            <div class="question"><p><a href="#" class="editModal-link" data-id="${contents.id}" data-question="${contents.question}" data-answer="${contents.answer}" data-tag="${contents.tag}">${contents.question}</a></p></div>
+                            <div class="answer"><p>${contents.answer}</p></div>
+                            </div>
+                        `);
+                        faqDivContents.append(row);
+                    });
+                    $('.editModal-link').click(editModal);
+
+                    $('#page').val(page);
+
+                    if (response.count <= 0) {
+                        $('#pagingBtn').hide();
+                    } else {
+                        $('#pagingBtn').show();
+                        $('#pagingBtn').text('더보기(' + response.count + ')');
+                    }
+                },
+                error: function (error) {
+                    console.error('Error', error);
+                }
+            });
+        }
+
+        // faq 링크 클릭 모달 핸들러
+        function editModal(event) {
+            event.preventDefault();
+            const faqs = $(this).data();
+
+            $('#faqUpdateId').val(faqs.id);
+            $('#faqUpdateQuestionModalContent').val(faqs.question);
+            $('#faqUpdateAnswerModalContent').val(faqs.answer);
+
+            // 카테고리 옵션 추가
+            addOptionsToModal([
+                {value: 'ALL', text: '전체'},
+                {value: 'WEBSITE', text: '웹사이트'},
+                {value: 'MILEAGE', text: '통합 마일리지'},
+                {value: 'REPAIR', text: '수선'},
+                {value: 'STORE', text: '매장 관련'},
+                {value: 'PRODUCT', text: '제품'},
+                {value: 'MEMBERS', text: '멤버스'},
+                {value: 'RETURN', text: '교환/반품'}
+            ]);
+            $('#tagUpdateSelect').val(faqs.tag);
+
+            $('#faqUpdateModal').show();
+        }
+
+        function addOptionsToModal(tags) {
+            let selectElement = $('#tagUpdateSelect');
+            selectElement.empty(); // 기존의 옵션들 제거
+
+            // 옵션 추가
+            tags.forEach(function (tag) {
+                let option = $('<option></option>').attr('value', tag.value).text(tag.text);
+                selectElement.append(option);
+            });
+        }
+
+        function faqSearchBtn() {
+            let tag = document.getElementsByClassName("active")[0].getAttribute("id").toUpperCase();
+            let page = pageNumber;
+            let condition = $('#condition').val();
+
+            $.ajax({
+                url: '/admin/faqsList',
+                method: 'GET',
+                data: {tag: tag, page: page, condition: condition},
+                success: function (response) {
+                    const faqDivContents = $('#faqsDivList .contents');
+                    faqDivContents.empty();
+                    $.each(response.contents, function (index, contents) {
+
+                        const row = $('<div>');
+                        row.html(`
+                            <div class="content">
+                            <div class="question"><p><a href="#" class="editModal-link" data-id="${contents.id}" data-question="${contents.question}" data-answer="${contents.answer}" data-tag="${contents.tag}">${contents.question}</a></p></div>
+                            <div class="answer"><p>${contents.answer}</p></div>
+                            </div>
+                        `);
+                        faqDivContents.append(row);
+                    });
+                    $('.editModal-link').click(editModal);
+
+                    $('#page').val(page);
+
+                    if (response.count <= 0) {
+                        $('#pagingBtn').hide();
+                    } else {
+                        $('#pagingBtn').show();
+                        $('#pagingBtn').text('더보기(' + response.count + ')');
+                    }
+                },
+                error: function (error) {
+                    console.error('Error:', error);
+                }
+            });
+        }
+
+        //더보기 버튼 클릭 이벤트
+        $('#pagingBtn').click(function () {
+            paging();
+        });
+
+        function paging() {
+            pageNumber++; //페이지 번호 증가
+            $.get('/admin/api/faqs', {
+                page: pageNumber,
+                condition: $("#condition").val(),
+                tag: document.getElementsByClassName("active")[0].getAttribute("id").toUpperCase()
+            })
+                .done(data => {
+                    let contents = data.contents;
+                    let count = data.count;
+                    let divContents = $("div.contents");
+                    contents.forEach(contents => {
+                        divContents.append(`
+                           <div class="content"></div>
+                           <div class="questrion"><p><a href="" class="editModal-link" data-id="${contents.id}" data-question="${contents.question}" data-answer="${contents.answer}" data-tag="${contents.tag}">${contents.question}</a></p></div>
+                           <div class="answer"><p>${contents.answer}</p></div>
+                        `)
+                    });
+                    $('.editModal-link').click(editModal);
+
+                    $("#pagingBtn").text('더보기(' + data.count + ')');
+
+                    if (count === 0) {
+                        $("#pagingBtn").hide();
+                    }
+                })
+                .fail(error => {
+                    console.error('Error', error);
+                });
+        }
+
+        function changeActive(resTag) {
+            $('li').removeClass('active');
+
+            switch (resTag) {
+                case "ALL":
+                    $("#all").addClass("active");
+                    break;
+                case "WEBSITE":
+                    $("#website").addClass("active");
+                    break;
+                case "MILEAGE":
+                    $("#mileage").addClass("active");
+                    break;
+                case "REPAIR":
+                    $("#repair").addClass("active");
+                    break;
+                case "STORE":
+                    $("#store").addClass("active");
+                    break;
+                case "PRODUCT":
+                    $("#product").addClass("active");
+                    break;
+                case "MEMBERS":
+                    $("#members").addClass("active");
+                    break;
+                case "RETURN":
+                    $("#return").addClass("active");
+                    break;
+                default:
+                    $("#all").addClass("active");
+                    break;
+            }
+        }
+        //Enter 검색
+        $('#condition').on('keypress',function(event){
+            if(event.keyCode === 13) {
+                event.preventDefault();
+                pageNumber = 0; // Enter 검색 시 페이지 번호 초기화
+                const tag = document.getElementsByClassName('active')[0].getAttribute('id').toUpperCase();
+                loadFaqContent(tag);
+            }
+        });
+    });
+</script>
+</body>
+</html>

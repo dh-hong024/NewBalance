@@ -20,5 +20,6 @@
 <!--<footer th:replace="~{common/config/footer::footer}"></footer>-->
 
 
+<a href="/admin-page" sec:authorize="hasRole('ROLE_ADMIN')">관리자페이지</a>
 </body>
 </html>
