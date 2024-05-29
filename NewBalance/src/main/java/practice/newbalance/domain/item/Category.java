@@ -15,6 +15,10 @@ public class Category {
     @Column(name = "name")
     private String name;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "title")
+    private CategoryEnum title;
+
     @Column(name = "ref")
     private int ref;
 
