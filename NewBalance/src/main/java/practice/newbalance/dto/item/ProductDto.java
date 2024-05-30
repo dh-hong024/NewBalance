@@ -37,6 +37,8 @@ public class ProductDto {
 
     private Category category;
 
+    private int quantity;
+
     public Product toEntity(){
         return Product.builder()
                 .id(id)
@@ -51,6 +53,7 @@ public class ProductDto {
                 .features(features)
                 .manufactureDate(manufactureDate)
                 .category(category)
+                .quantity(quantity)
                 .build();
     }
 }

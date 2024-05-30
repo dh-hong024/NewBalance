@@ -53,6 +53,29 @@ public class Product extends ModifierEntity {
     @Column(name = "manufacture_date")
     private LocalDateTime manufactureDate;
 
+    @Column(name = "quantity")
+    private int quantity;
+
+    /**
+     * 상품 수량 증가
+     * @param quantity
+     */
+    public void addStock(int quantity){
+        this.quantity += quantity;
+    }
+
+    /**
+     * 상품 수량 감소
+     * @param quantity
+     */
+    public void removeStock(int quantity){
+        int restStock = this.quantity - quantity;
+        if(restStock < 0){
+
+        }
+        this.quantity = restStock;
+    }
+
     public ProductDto toDTO(){
         return ProductDto.builder()
                 .id(id)
@@ -67,6 +90,7 @@ public class Product extends ModifierEntity {
                 .features(features)
                 .manufactureDate(manufactureDate)
                 .category(category)
+                .quantity(quantity)
                 .build();
     }
 
