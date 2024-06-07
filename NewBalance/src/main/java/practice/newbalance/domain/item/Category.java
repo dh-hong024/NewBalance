@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import practice.newbalance.dto.item.CategoryDto;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity @Getter
@@ -32,7 +33,7 @@ public class Category {
     private int step;
 
     @OneToMany(mappedBy = "category")
-    private List<Product> products;
+    private List<Product> products = new ArrayList<>();
 
     public CategoryDto toDto() {
         CategoryDto categoryDto = CategoryDto.builder()
@@ -44,4 +45,5 @@ public class Category {
                 .build();
         return categoryDto;
     }
+
 }
