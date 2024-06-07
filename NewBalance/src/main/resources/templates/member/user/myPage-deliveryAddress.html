@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/config/myPageLayout}"
+      layout:fragment="myContent">
+
+    <div id="deliveryAddressContent" class="my_cont">
+        <h3 class="title">배송지 관리</h3>
+        <p>자주 쓰는 배송지 주소를 저장하시면 보다 편리하게 이용이 가능합니다.</p>
+        <div class="cont_list_info">
+            <ul>
+                <li th:each="myContent : ${myContents}">
+                    <p><span th:text="${myContent.recipient} + '(' + ${myContent.destination} + ')'"></span> <span th:if="${myContent.getDefaultYN()}">기본 배송지</span>
+                        <button class="cont_list_btn" th:onclick="|updateForm(${myContent.getId()})|">수정</button>
+                        <button class="cont_list_btn" th:onclick="|deleteCont(${myContent.getId()})|">삭제</button>
+                    </p>
+                    <p><span th:text="${myContent.recipientNumber}"></span> |
+                        <span th:text="${myContent.otherNumber}"></span></p>
+                    <p><span th:text="${myContent.zipCode}"></span></p>
+                    <p><span th:text="${myContent.address}"></span></p>
+                    <p><span th:text="${myContent.detailAddress}"></span></p>
+                </li>
+            </ul>
+        </div>
+        <div class="addAddressBtn">
+            <button type="button" onclick="location.href='/my/delivery-addr-form'" id="addAddressBtn">배송지 추가</button>
+        </div>
+    </div>
+</html>

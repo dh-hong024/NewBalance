@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/config/defaultLayout}"
+>
+<head>
+    <link rel="stylesheet" href="/css/member/mypage-detail.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        function updateForm(id){
+            location.href="/my/delivery-addr/" + id
+        }
+        function deleteCont(id){
+            $.ajax({
+                url : "/my/delivery-addr/" + id,
+                method : "DELETE",
+                success : (data) => {
+                    location.href="/my/delivery-addr"
+                },
+                error : (e) => {
+                    console.log(e);
+                }
+            });
+        }
+        /*]]>*/
+    </script>
+</head>
+<div class="container" layout:fragment="content">
+    <div id="wrap">
+        <div class="lnb" th:replace="common/config/myPageMenu :: lnb"></div>
+        <div class="my_cont" layout:fragment="myContent"></div>
+    </div>
+</div>
+</html>

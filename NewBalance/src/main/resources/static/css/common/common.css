@@ -14,6 +14,7 @@ body{
 
 a {
     color : black;
+    text-decoration-line: none;
 }
 
 .nav{
@@ -84,5 +85,23 @@ a {
     color : white;
 }
 
+#wrap{
+    display: flex;
+    margin-top: 200px;
+}
+#lnb{
+    display: inline-block;
+    width : 300px;
+}
+.category{
+    margin-top : 70px;
+}
+.category > ul > li{
+    list-style: none;
+    margin-bottom: 10px;
+}
+.category > ul{
+    padding-left: 0;
+}
 
 

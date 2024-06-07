@@ -44,6 +44,10 @@ public class Member {
     @Column(name = "role")
     private String role;
 
+
+    @OneToMany(mappedBy = "memberId")
+    private List<DeliveryAddress> address;
+
     public MemberDto toDTO() {
         MemberDto memberDto = MemberDto.builder()
                 .userId(userId)
