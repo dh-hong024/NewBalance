@@ -5,8 +5,6 @@ import lombok.*;
 import practice.newbalance.domain.item.Category;
 import practice.newbalance.domain.item.CategoryEnum;
 
-
-
 @NoArgsConstructor
 @Builder
 @Getter

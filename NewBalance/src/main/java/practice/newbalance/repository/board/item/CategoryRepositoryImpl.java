@@ -22,19 +22,6 @@ public class CategoryRepositoryImpl implements CustomCategoryRepository{
         this.queryFactory = queryFactory;
     }
 
-//    public JPAQuery<CategoryDto> findCategoryById(String title) {
-//        return queryFactory.select(Projections.constructor(
-//                    CategoryDto.class,
-//                    category.id,
-//                    category.name,
-//                    category.title,
-//                    category.ref,
-//                    category.step))
-//                .from(category)
-//                .where(titleChecked(title))
-//                .orderBy(category.id.desc());
-//    }
-
     public BooleanExpression titleChecked(String title){
         QCategory category = QCategory.category;
         return category.title.eq(CategoryEnum.valueOf(title));
