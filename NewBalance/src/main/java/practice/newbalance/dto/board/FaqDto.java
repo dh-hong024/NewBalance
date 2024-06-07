@@ -5,7 +5,6 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import practice.newbalance.domain.board.FaqTag;
 import practice.newbalance.domain.board.Faqs;
-import practice.newbalance.domain.board.Notice;
 
 @Data
 @NoArgsConstructor

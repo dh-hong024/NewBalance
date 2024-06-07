@@ -48,6 +48,8 @@ dependencies {
     //타임리프 관련 설정
     implementation group: 'nz.net.ultraq.thymeleaf', name: 'thymeleaf-layout-dialect', version: '3.3.0'
 
+    implementation  'org.springframework.boot:spring-boot-devtools'
+
 }
 
 tasks.named('test') {

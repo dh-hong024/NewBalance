@@ -25,6 +25,7 @@ public class NoticeDto {
 
     public Notice toEntity() {
         Notice notice = Notice.builder()
+
                 .id(id)
                 .noticeTitle(noticeTitle)
                 .noticeContent(noticeContent)

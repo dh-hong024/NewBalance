@@ -13,8 +13,8 @@ public class QNoticeDto extends ConstructorExpression<NoticeDto> {
 
     private static final long serialVersionUID = 1896709137L;
 
-    public QNoticeDto(com.querydsl.core.types.Expression<Long> id, com.querydsl.core.types.Expression<String> noticeTitle, com.querydsl.core.types.Expression<Integer> noticeCount, com.querydsl.core.types.Expression<java.time.LocalDateTime> modifiedDate) {
-        super(NoticeDto.class, new Class<?>[]{long.class, String.class, int.class, java.time.LocalDateTime.class}, id, noticeTitle, noticeCount, modifiedDate);
+    public QNoticeDto(com.querydsl.core.types.Expression<Long> id, com.querydsl.core.types.Expression<String> noticeTitle, com.querydsl.core.types.Expression<String> noticeContent, com.querydsl.core.types.Expression<Integer> noticeCount, com.querydsl.core.types.Expression<java.time.LocalDateTime> modifiedDate) {
+        super(NoticeDto.class, new Class<?>[]{long.class, String.class, String.class, int.class, java.time.LocalDateTime.class}, id, noticeTitle, noticeContent, noticeCount, modifiedDate);
     }
 
 }

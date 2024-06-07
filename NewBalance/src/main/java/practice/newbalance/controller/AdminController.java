@@ -1,5 +1,6 @@
 package practice.newbalance.controller;
 
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,10 +11,12 @@ import practice.newbalance.domain.board.FaqTag;
 import practice.newbalance.domain.board.Notice;
 import practice.newbalance.dto.board.FaqDto;
 import practice.newbalance.dto.board.NoticeDto;
+import practice.newbalance.dto.item.CategoryDto;
 import practice.newbalance.dto.member.MemberDto;
 import practice.newbalance.service.MemberService;
 import practice.newbalance.service.board.FaqServiceImpl;
 import practice.newbalance.service.board.NoticeService;
+import practice.newbalance.service.item.CategoryService;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -23,14 +26,15 @@ import java.util.stream.Collectors;
 
 @Controller
 public class AdminController {
-
     private final NoticeService noticeService;
     private final MemberService memberService;
     private final FaqServiceImpl faqService;
-    public AdminController(NoticeService noticeService, MemberService memberService, FaqServiceImpl faqService) {
+    private final CategoryService categoryService;
+    public AdminController(NoticeService noticeService, MemberService memberService, FaqServiceImpl faqService, CategoryService categoryService) {
         this.noticeService = noticeService;
         this.memberService = memberService;
         this.faqService = faqService;
+        this.categoryService = categoryService;
     }
 
     @GetMapping("/admin-page")
@@ -241,5 +245,49 @@ public class AdminController {
         response.put("totalMembers", totalMembers);
 
         return response;
+    }
+
+    @GetMapping("/admin/categoryList")
+    @ResponseBody
+    public Map<String, Object> categoryList(
+            @RequestParam(value = "title", required = false) String title){
+
+        List<CategoryDto> categoryDtos = categoryService.findByCategory(title);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("categoryDtos", categoryDtos);
+
+        return response;
+    }
+
+    @PostMapping("/admin/addItem")
+    public ResponseEntity<String> addItem(@RequestBody CategoryDto categoryDto) {
+        try{
+            categoryService.addItem(categoryDto);
+            return ResponseEntity.ok("success");
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("fail");
+        }
+    }
+
+    @PostMapping(value = "/admin/editItem/{categoryId}")
+    public ResponseEntity<String> editItem(@PathVariable("categoryId") Long categoryId,
+                                           @RequestBody CategoryDto categoryDto) {
+        try {
+            categoryService.editItem(categoryId, categoryDto);
+            return ResponseEntity.ok("success");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("fail");
+        }
+    }
+
+    @PostMapping("/admin/deleteItem/{categoryId}")
+    public ResponseEntity<String> deleteItem(@PathVariable("categoryId") Long categoryId) {
+        try{
+            categoryService.deleteItem(categoryId);
+            return ResponseEntity.ok("success");
+        }catch (Exception e){
+            return ResponseEntity.noContent().build();
+        }
     }
 }

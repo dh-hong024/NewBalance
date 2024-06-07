@@ -45,7 +45,7 @@
         text-decoration: none;
         cursor: pointer;
     }
-    #noticesTable, #noticeEdit, #loadNoticeMore, #membersTable, #loadMemberMore, #faqsDivList {
+    #noticesTable, #noticeEdit, #loadNoticeMore, #membersTable, #loadMemberMore, #faqsDivList,#categoryDivList {
         display: none;
     }
 
@@ -60,6 +60,41 @@
         cursor: pointer;
         border: solid #dbdbdb;
     }
+    .category_tabs > .category_tabs a{
+        color: black;
+    }
+    .category_tabs > .tab-item {
+        float: left;
+        list-style: none;
+        padding: 10px;
+        margin: 10px 10px 0 0;
+        cursor: pointer;
+        border: solid #dbdbdb;
+    }
+
+    .inner {
+        display: flex;
+        gap: 20px; /* 각 .depth 요소 간의 간격 */
+    }
+
+    .depth ul {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+        flex-grow: 1; /* ul 태그가 남은 공간을 채우도록 설정 */
+        margin-bottom: 10px; /* 목록과 버튼 그룹 사이의 간격 */
+    }
+
+    .depth .cateBtn input[type="text"] {
+        margin-bottom: 5px; /* 텍스트 입력 박스와 버튼들 사이의 간격 */
+    }
+
+    .depth .cateBtn .buttons {
+        display: flex;
+        gap: 5px; /* 버튼들 사이의 간격 */
+    }
+
+
 </style>
 <h2>관리자페이지</h2>
 <!-- 메뉴 토글 시작 -->
@@ -79,6 +114,14 @@
                 <li><a href="" id="memberList">회원관리</a></li>
             </ul>
         </li>
+
+        <li class="menu">
+            <a>카테고리메뉴</a>
+            <ul class="hide">
+                <li><a href="" id="categoryList">카테고리관리</a></li>
+            </ul>
+        </li>
+
     </ul>
 </div>
 <!-- 메뉴 토글 끝 -->
@@ -197,7 +240,7 @@
 <!-- update Modal 끝 -->
 
 
-<!-- 회원 정보 시작-->
+<!-- member List 시작-->
 <div>
     <table id="membersTable" class="table table-striped">
         <thead>
@@ -216,18 +259,148 @@
 
     <button id="loadMemberMore">더보기</button>
 </div>
-<!-- 회원 정보 끝 -->
+<!-- member List 끝 -->
+
+<!-- category 시작-->
+<div id="categoryDivList">
+    <ul class="clearfix">
+            <li class="nav">
+                    <ul class="category_tabs">
+                        <li class="tab-item" id="men" data-tab="tab-1" data-title="MEN"><a>Men</a></li>
+                        <li class="tab-item" id="women" data-tab="tab-2" data-title="WOMEN"><a>Women</a></li>
+                        <li class="tab-item" id="kids" data-tab="tab-3" data-title="KIDS"><a>Kids</a></li>
+                    </ul>
+            </li>
+
+        <br><br>
+
+        <div class="inner" id="cateMan">
+            <div class="depth">
+                <strong class="tit">Featured</strong>
+                <div class="content">
+                        <ul id="ul_Featured">
+                            <!-- 내용 추가 -->
+                        </ul>
+                        <div class="cateBtn">
+                            <input type="text" id="depth_1" data-ref="1"><br>
+                            <div class="buttons">
+                                <input type="button" id="depth_1_BtnAdd" value="추가">
+                                <input type="button" id="depth_1_BtnEdit" value="수정">
+                                <input type="button" id="depth_1_BtnDelete" value="삭제">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="depth">
+                    <strong class="tit">신발</strong>
+                    <div class="content">
+                        <ul id="ul_Shoes">
+                            <!-- 내용 추가 -->
+                        </ul>
+                        <div class="cateBtn">
+                            <input type="text" id="depth_2" data-ref="2"><br>
+                            <div class="buttons">
+                                <input type="button" id="depth_2_BtnAdd" value="추가">
+                                <input type="button" id="depth_2_BtnEdit" value="수정">
+                                <input type="button" id="depth_2_BtnDelete" value="삭제">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="depth">
+                    <strong class="tit">의류</strong>
+                    <div class="content">
+                    <ul id="ul_Clothing">
+                        <!-- 내용 추가 -->
+                    </ul>
+                        <div class="cateBtn">
+                            <input type="text" id="depth_3" data-ref="3"><br>
+                            <div class="buttons">
+                                <input type="button" id="depth_3_BtnAdd" value="추가">
+                                <input type="button" id="depth_3_BtnEdit" value="수정">
+                                <input type="button" id="depth_3_BtnDelete" value="삭제">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="depth">
+                    <strong class="tit">용품</strong>
+                    <div class="content">
+                    <ul id="ul_Supplies">
+                        <!-- 내용 추가 -->
+                    </ul>
+                        <div class="cateBtn">
+                            <input type="text" id="depth_4" data-ref="4"><br>
+                            <div class="buttons">
+                                <input type="button" id="depth_4_BtnAdd" value="추가">
+                                <input type="button" id="depth_4_BtnEdit" value="수정">
+                                <input type="button" id="depth_4_BtnDelete" value="삭제">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="depth" id="cateUnderwear">
+                    <strong class="tit">언더웨어</strong>
+                    <div class="content">
+                    <ul id="ul_Underwear">
+                        <!-- 내용 추가 -->
+                    </ul>
+                        <div class="cateBtn">
+                            <input type="text" id="depth_5" data-ref="5"><br>
+                            <div class="buttons">
+                                <input type="button" id="depth_5_BtnAdd" value="추가">
+                                <input type="button" id="depth_5_BtnEdit" value="수정">
+                                <input type="button" id="depth_5_BtnDelete" value="삭제">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="depth" id="cateSports">
+                    <strong class="tit">스포츠</strong>
+                    <div class="content">
+                    <ul id="ul_Sports">
+                        <!-- 내용 추가 -->
+                    </ul>
+                        <div class="cateBtn">
+                            <input type="text" id="depth_6" data-ref="6"><br>
+                            <div class="buttons">
+                                <input type="button" id="depth_6_BtnAdd" value="추가">
+                                <input type="button" id="depth_6_BtnEdit" value="수정">
+                                <input type="button" id="depth_6_BtnDelete" value="삭제">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="depth" id="cateKids">
+                    <strong class="tit">연중판매</strong>
+                    <div class="content">
+                    <ul id="ul_YearRound">
+                        <!-- 내용 추가 -->
+                    </ul>
+                        <div class="cateBtn">
+                            <input type="text" id="depth_7" data-ref="7"><br>
+                            <div class="buttons">
+                                <input type="button" id="depth_7_BtnAdd" value="추가">
+                                <input type="button" id="depth_7_BtnEdit" value="수정">
+                                <input type="button" id="depth_7_BtnDelete" value="삭제">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </div>
+    </ul>
+</div>
+
+<!-- category menu 끝-->
 
 <script th:inline="javascript">
     let pageNumber = 0;
-    // function adminSearchContents() {
-    //     let tag = document.getElementsByClassName("active")[0].getAttribute("id").toUpperCase();
-    //
-    //     $("#tag").val(tag);
-    //     $("#page").val(pageNumber);
-    //     $("#searchForm").submit();
-    //
-    // }
 
     $(document).ready(function () {
         let offset = 0;
@@ -341,6 +514,7 @@
             $('#noticesTable, #loadNoticeMore, #noticeEdit').show();
             $('#membersTable, #loadMemberMore').hide();
             $('#faqsDivList').hide();
+            $('#categoryDivList').hide();
             noticeList(offset, limit);
         });
 
@@ -350,7 +524,19 @@
             $('#membersTable, #loadMemberMore').show();
             $('#faqsDivList').hide();
             $('#noticesTable, #loadNoticeMore, #noticeEdit').hide();
+            $('#categoryDivList').hide();
             memberList(offset, limit);
+        });
+
+        // category 목록 로드
+        $('#categoryList').click(function(event){
+            event.preventDefault();
+            $('#noticesTable, #loadNoticeMore, #noticeEdit').hide();
+            $('#membersTable, #loadMemberMore').hide();
+            $('#faqsDivList').hide();
+            $('#categoryDivList').show();
+            $('.tab-item[data-title="MEN"]').addClass('active');
+            CategoryList('MEN');
         });
 
         // 공지사항 더보기 버튼 클릭 이벤트
@@ -452,6 +638,7 @@
             $('#faqsDivList').show();
             $('#membersTable, #loadMemberMore').hide();
             $('#noticesTable, #loadNoticeMore, #noticeEdit').hide();
+            $('#categoryDivList').hide();
             let tag = document.getElementsByClassName("active")[0].getAttribute("id").toUpperCase();
             loadFaqContent(tag);
         });
@@ -761,6 +948,7 @@
                     break;
             }
         }
+
         //Enter 검색
         $('#condition').on('keypress',function(event){
             if(event.keyCode === 13) {
@@ -770,7 +958,245 @@
                 loadFaqContent(tag);
             }
         });
+
+        // 카테고리 목록 시작
+        function CategoryList(title){
+            $.ajax({
+                url: '/admin/categoryList',
+                type: 'GET',
+                data: { title: title },
+                success: function(data){
+                    var categoryDtos = data.categoryDtos;
+
+                    if(Array.isArray(categoryDtos)){
+                        var ulFeatured = $('#ul_Featured');
+                        var ulShoes = $('#ul_Shoes');
+                        var ulSupplies = $('#ul_Supplies');
+                        var ulUnderwear = $('#ul_Underwear');
+                        var ulClothing = $('#ul_Clothing');
+                        var ulSports = $('#ul_Sports');
+                        var ulYearRound = $('#ul_YearRound');
+
+                        ulFeatured.empty();
+                        ulShoes.empty();
+                        ulClothing.empty();
+                        ulSupplies.empty();
+                        ulUnderwear.empty();
+                        ulSports.empty();
+                        ulYearRound.empty();
+
+                        categoryDtos.forEach(function(category) {
+                            if(title !== "KIDS"){
+                                if (category.ref === 1) {
+                                    ulFeatured.append('<li id="' + category.id + '" data-step="' + category.step + '">' + category.name + '</li>');
+                                } else if (category.ref === 2) {
+                                    ulShoes.append('<li id="' + category.id + '" data-step="' + category.step + '">' + category.name + '</li>');
+                                } else if (category.ref === 3) {
+                                    ulClothing.append('<li id="' + category.id + '" data-step="' + category.step + '">' + category.name + '</li>');
+                                } else if(category.ref === 4) {
+                                    ulSupplies.append('<li id="' + category.id + '" data-step="' + category.step + '">' + category.name + '</li>');
+                                } else if(category.ref === 5) {
+                                    ulUnderwear.append('<li id="' + category.id + '" data-step="' + category.step + '">' + category.name + '</li>');
+                                } else if(category.ref === 6) {
+                                    ulSports.append('<li id="' + category.id + '" data-step="' + category.step + '">' + category.name + '</li>');
+                                }
+                                $('#cateKids').hide();
+                                $('#cateUnderwear').show();
+                                $('#cateSports').show();
+                                ulListHeight();
+                            } else {
+                                if (category.ref === 1) {
+                                    ulFeatured.append('<li id="' + category.id + '" data-step="' + category.step + '">' + category.name + '</li>');
+                                } else if (category.ref === 2) {
+                                    ulShoes.append('<li id="' + category.id + '" data-step="' + category.step + '">' + category.name + '</li>');
+                                } else if (category.ref === 3) {
+                                    ulClothing.append('<li id="' + category.id + '" data-step="' + category.step + '">' + category.name + '</li>');
+                                } else if(category.ref === 4) {
+                                    ulSupplies.append('<li id="' + category.id + '" data-step="' + category.step + '">' + category.name + '</li>');
+                                } else if(category.ref === 7) {
+                                    ulYearRound.append('<li id="' + category.id + '" data-step="' + category.step + '">' + category.name + '</li>');
+                                }
+                                $('#cateKids').show();
+                                $('#cateUnderwear').hide();
+                                $('#cateSports').hide();
+                                ulListHeight();
+                            }
+                        });
+                    } else {
+                        console.log('not array');
+                    }
+                },
+                error: function(error){
+                    console.log('Error:', error);
+                }
+            });
+        }
+        // 탭 클릭시 이동
+        $('.tab-item').on('click', function(){
+            // 모든 탭에서 active 클래스 제거하고 클릭된 탭에 active 추가
+            $('.tab-item').removeClass('active');
+            $(this).addClass('active');
+
+            // 현재 설정된 탭의 타이틀 가져오기
+            const title = $(this).data('title');
+
+            CategoryList(title);
+            $('#depth_1, #depth_2, #depth_3, #depth_4, #depth_5, #depth_6, #depth_7').val('');
+        });
+
+        // 추가, 수정, 삭제 함수
+        function multiCategory(ref, action, selectedText, title, categoryId) {
+            const text = $('#depth_' + ref).val();
+            let step;
+
+            if (action === 'addItem') {
+                step = $('#' + getSelectedListId(title)[ref - 1] + ' li').length + 1;
+                categoryId = null; // 추가 시 id를 null로 설정
+            } else {
+                step = selectedText.data('step');
+            }
+
+            console.log({ id: categoryId, name: text, ref: ref, step: step, title: title })
+
+            $.ajax({
+                url: '/admin/' + action + (categoryId ? '/' + categoryId : ''),
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({ id: categoryId,  name: text, ref: ref, step: step, title: title }),
+                success: function(data) {
+                    if (action === 'addItem') {
+                        const newId = data.id
+                        $('#' + getSelectedListId(title)[ref - 1]).append('<li id="' + newId + '" data-step="' + step + '">' + text + '</li>');
+                        $('#depth_' + ref).val('');
+                        CategoryList(title);
+                    } else if (action === 'editItem') {
+                        selectedText.text(text);
+                        $('#depth_' + ref).val('');
+                        CategoryList(title);
+                    } else if (action === 'deleteItem') {
+                        selectedText.remove();
+                        $('#depth_' + ref).val('');
+                        CategoryList(title);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error:', error);
+                    alert('서버 오류가 발생했습니다.');
+                }
+            });
+        }
+        function getSelectedListId(title) {
+            switch (title) {
+                case 'MEN':
+                case 'WOMEN':
+                    return ['ul_Featured', 'ul_Shoes', 'ul_Clothing', 'ul_Supplies', 'ul_Underwear', 'ul_Sports'];
+                case 'KIDS':
+                    return ['ul_Featured', 'ul_Shoes', 'ul_Clothing', 'ul_Supplies', '','','ul_YearRound']; // KIDS의 설정된 ref값 만큼의 배열의 길이가 필요, ul_Supplies, ul_Underwear는 사용하지 않는 태그로 공백처리로 배열의 값 설정
+                default:
+                    return [];
+            }
+        }
+
+        // 추가, 수정, 삭제 버튼 클릭 시 이벤트 처리
+        for (let i = 1; i <= 10; i++) {
+            $('#depth_' + i + '_BtnAdd').click(function() {
+                const title = $('.category_tabs .tab-item.active').data('title');
+                console.log(title);
+                multiCategory(i, 'addItem', null, title, null);
+            });
+
+            $('#depth_' + i + '_BtnEdit').click(function() {
+                const selectedText = $('#' + getSelectedListId($('.category_tabs .tab-item.active').data('title'))[i - 1] + ' li.selected');
+                console.log(selectedText);
+                if (selectedText.length) {
+                    const title = $('.category_tabs .tab-item.active').data('title');
+                    const categoryId = selectedText.attr('id');
+                    multiCategory(i, 'editItem', selectedText, title, categoryId);
+                } else {
+                    alert('수정할 항목을 선택하세요.');
+                }
+            });
+
+
+            $('#depth_' + i + '_BtnDelete').click(function() {
+                const selectedText = $('#' + getSelectedListId($('.category_tabs .tab-item.active').data('title'))[i - 1] + ' li.selected');
+                if (selectedText.length) {
+                    const title = $('.category_tabs .tab-item.active').data('title');
+                    const categoryId = selectedText.attr('id'); // 선택된 아이템의 ID를 가져옴
+                    multiCategory(i, 'deleteItem', selectedText, title, categoryId);
+                } else {
+                    alert('삭제할 항목을 선택하세요.');
+                }
+            });
+        }
+
+        $(document).on('click', '#ul_Featured li, #ul_Shoes li, #ul_Clothing li, #ul_Supplies li, #ul_Underwear li, #ul_Sports li, #ul_YearRound li', function(){
+           $(this).siblings().removeClass('selected');
+           $(this).addClass('selected');
+
+           const parentId = $(this).parent().attr('id');
+           const text = $(this).text();
+
+           if(parentId === 'ul_Featured') {
+               $('#depth_1').val(text);
+           } else if(parentId === 'ul_Shoes') {
+                $('#depth_2').val(text);
+           } else if(parentId === 'ul_Clothing') {
+               $('#depth_3').val(text);
+           } else if(parentId === 'ul_Supplies') {
+               $('#depth_4').val(text);
+           } else if(parentId === 'ul_Underwear') {
+               $('#depth_5').val(text);
+           } else if(parentId === 'ul_Sports') {
+               $('#depth_6').val(text);
+           } else if(parentId === 'ul_YearRound') {
+               $('#depth_7').val(text);
+           }
+        });
+
+        function ulListHeight() {
+            const uls = document.querySelectorAll('.depth ul');
+            let maxHeight = 0;
+
+            uls.forEach(ul => {
+                ul.style.height = 'auto';
+                if (ul.clientHeight > maxHeight) {
+                    maxHeight = ul.clientHeight;
+                }
+            });
+
+            uls.forEach(ul => {
+                ul.style.height = maxHeight + 'px';
+            });
+        }
+
     });
 </script>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+<!--function ulListHeight() {-->
+<!--const uls = document.querySelectorAll('.depth ul');-->
+<!--let maxHeight = 0;-->
+
+<!--uls.forEach(ul => {-->
+<!--ul.style.height = 'auto';-->
+<!--if (ul.clientHeight > maxHeight) {-->
+<!--maxHeight = ul.clientHeight;-->
+<!--}-->
+<!--});-->
+
+<!--uls.forEach(ul => {-->
+<!--ul.style.height = maxHeight + 'px';-->
+<!--});-->
+<!--}-->

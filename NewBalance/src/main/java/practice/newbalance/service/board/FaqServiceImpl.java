@@ -50,6 +50,8 @@ public class FaqServiceImpl implements FaqService{
         faqs.setTag(faqDto.getTag());
         faqs.setQuestion(faqDto.getQuestion());
         faqs.setAnswer(faqDto.getAnswer());
+
+        faqRepository.save(faqs);
     }
 
     public void deleteFaq(Long faqId){
