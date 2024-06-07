@@ -1,7 +1,5 @@
 <!doctype html>
 <html lang="ko"
-      xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
     layout:decorate="~{common/config/defaultLayout}">
 <head>
@@ -9,17 +7,10 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-<!--    <link rel="stylesheet" type="text/css" th:href="@{/css/common/common.css}">-->
-    <title>Document</title>
+    <title>NewBalance Clone</title>
 </head>
 <body>
-<!--<header th:replace="~{common/config/navbar::headerFragment}"></header>-->
 <div class="container" layout:fragment="content">
-<h1>asdasd</h1>
 </div>
-<!--<footer th:replace="~{common/config/footer::footer}"></footer>-->
-
-
-<a href="/admin-page" sec:authorize="hasRole('ROLE_ADMIN')">관리자페이지</a>
 </body>
 </html>
