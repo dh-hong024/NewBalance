@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/config/myPageLayout}"
+      layout:fragment="myContent">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script th:inline="javascript">
+        //배송지 추가 submit
+        function addAddressSubmit(){
+            let data = {
+                "recipient" : $("#recipient").val(),
+                "destination" : $("#destination").val(),
+                "recipientNumber" : $("#recipientNumber").val(),
+                "zipCode" : $("#zipCode").val(),
+                "address" : $("#address").val(),
+                "detailAddress" : $("#detailAddress").val(),
+                "defaultYN" : $('#defaultYN').is(':checked')
+            };
+            $.ajax("/my/delivery-addr", {
+                method : "POST",
+                data : data,
+                success : function() {
+                    location.href="/my/delivery-addr";
+                }
+            })
+        }
+    </script>
+    <title>Document</title>
+</head>
+
+    <div id="deliveryAddressForm" class="my_cont">
+        <h3 class="title">배송지 추가</h3>
+        <div class="form-group">
+            <div class="row">
+                <label for="recipient">이름(받으실 분)</label>
+                <div class="data">
+                    <input type="text" name="recipient" id="recipient">
+                </div>
+            </div>
+            <div class="row">
+                <label for="destination">배송지명</label>
+                <div class="data">
+                    <input type="text" name="destination" id="destination"><br>
+                </div>
+            </div>
+            <div class="row">
+                <label for="recipientNumber">휴대폰 번호</label>
+                <div class="data">
+                    <input type="text" name="recipientNumber" id="recipientNumber"><br>
+                </div>
+            </div>
+
+            <div class="row">
+                <label for="address">배송지 주소</label><br>
+                <div class="data">
+                    <button>우편번호 찾기</button>
+                    <input type="text" name="zipCode" id="zipCode"><br>
+                    <input type="text" name="address" id="address"><br>
+                    <input type="text" name="detailAddress" id="detailAddress"><br>
+                </div>
+                <input type="checkbox" name="defaultYN" id="defaultYN"><br>
+            </div>
+
+
+        </div>
+        <div class="btn">
+            <button type="button" id="addAddressSubmit" onclick="addAddressSubmit();">배송지 추가</button>
+        </div>
+    </div>
+</html>
