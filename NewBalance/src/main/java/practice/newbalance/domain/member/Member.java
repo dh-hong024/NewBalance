@@ -3,6 +3,7 @@ package practice.newbalance.domain.member;
 import jakarta.persistence.*;
 import lombok.*;
 import practice.newbalance.domain.board.Notice;
+import practice.newbalance.domain.item.Coupon;
 import practice.newbalance.dto.member.MemberDto;
 
 import java.util.ArrayList;
@@ -44,6 +45,9 @@ public class Member {
     @Column(name = "role")
     private String role;
 
+    @ManyToOne
+    @JoinColumn(name = "coupon_id")
+    private Coupon coupon;
 
     @OneToMany(mappedBy = "memberId")
     private List<DeliveryAddress> address;
