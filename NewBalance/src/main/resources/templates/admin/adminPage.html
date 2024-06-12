@@ -438,15 +438,17 @@
 <!-- coupon 목록 끝 -->
 
 <!-- coupon Add Modal 시작 -->
-<div id="CouponEditModal" class="modal">
+<div id="couponEditModal" class="modal">
     <div class="modal-content">
         <span class="close">&times;</span>
         <form id="CouponModalForm">
-            <p>title<input type="text" id="CouponEditTitle"></p>
-            <p>code<input type="text" id="CouponEditCode"></p> <button type="button" id="randomCodeBtn">코드생성</button>
-            <p>period<input type="text" id="CouponEditPeriod"></p>
-            <p>benefit
-                <select id="CouponEditBenefit">
+            <p>쿠폰명<input type="text" id="couponEditTitle"></p>
+            <p>쿠폰코드<input type="text" id="couponEditCode" disabled>
+                <button type="button" id="randomCodeBtn">코드생성</button>
+            </p>
+            <p>기간<input type="text" id="couponEditPeriod"></p>
+            <p>할인율
+                <select id="couponEditBenefit">
                     <option value="5">5%</option>
                     <option value="10">10%</option>
                     <option value="15">15%</option>
@@ -455,7 +457,7 @@
                     <option value="30">30%</option>
                 </select>
             </p>
-            <p>quantity<input type="text" id="CouponEditQuantity"></p>
+            <p>수량<input type="text" id="couponEditQuantity"></p>
             <div>
                 <button type="button" id="editCouponBtn" class="btn btn-primary"  sec:authorize="hasRole('ROLE_ADMIN')">등록</button>
                 <button type="button" id="cancelEditCouponBtn" class="btn btn-primary"  sec:authorize="hasRole('ROLE_ADMIN')">취소</button>
@@ -592,6 +594,7 @@
                 }
             });
         }
+
 
 
         // 공지사항 링크 클릭 모달 핸들러
@@ -734,7 +737,7 @@
             $('#noticeModal').hide();
             $('#faqEditModal').hide();
             $('#faqUpdateModal').hide();
-            $('#CouponEditModal').hide();
+            $('#couponEditModal').hide();
         });
 
         $('#cancelEditFaqBtn').click(function () {
@@ -742,7 +745,7 @@
         });
 
         $('#cancelEditCouponBtn').click(function(){
-            $('#CouponEditModal').hide();
+            $('#couponEditModal').hide();
         });
 
         $(window).click(function (event) {
@@ -752,8 +755,8 @@
                 $('#faqEditModal').hide();
             } else if (event.target === $('#faqUpdateModal')[0]) {
                 $('#faqUpdateModal').hide();
-            } else if(event.target === $('#CouponEditModal')[0]) {
-                $('#CouponEditModal').hide();
+            } else if(event.target === $('#couponEditModal')[0]) {
+                $('#couponEditModal').hide();
             }
         });
 
@@ -776,15 +779,16 @@
             loadTagList();
         });
 
+        // coupon 등록 modal
         $('#couponEditBtn').click(function (event) {
            event.preventDefault();
 
-            $('#CouponEditTitle').val('');
-            $('#CouponEditCode').val('');
-            $('#CouponEditPeriod').val('');
-            $('#CouponEditBenefit').val('5');
-            $('#CouponEditQuantity').val('');
-            $('#CouponEditModal').show();
+            $('#couponEditTitle').val('');
+            $('#couponEditCode').val('');
+            $('#couponEditPeriod').val('');
+            $('#couponEditBenefit').val('5');
+            $('#couponEditQuantity').val('');
+            $('#couponEditModal').show();
 
         });
 
@@ -805,6 +809,32 @@
                 }
             });
         }
+
+        // 쿠폰등록 Modal
+        $('#editCouponBtn').click(function(){
+            const dataForm = {
+                title: $('#couponEditTitle').val(),
+                code: $('#couponEditCode').val(),
+                period: $('#couponEditPeriod').val(),
+                benefit: $('#couponEditBenefit').val(),
+                quantity: $('#couponEditQuantity').val(),
+                status: 'NEW'
+            }
+            $.ajax({
+                url: '/admin/addCoupon',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(dataForm),
+                success:function(response){
+                    alert('저장완료');
+                    $('#couponEditModal').hide();
+                    couponList();
+                },
+                error:function(xhr, status, error){
+                    console.error('coupon 저장 실패' + error);
+                }
+            }) ;
+        });
 
         // faq 등록
         $('#editFaqBtn').click(function () {
@@ -1321,20 +1351,46 @@
             for (let i = 0; i < 9; i++ ) {
                 code += characters.charAt(Math.floor(Math.random() * characters.length));
             }
-            $('#CouponEditCode').val(code);
+            $('#couponEditCode').val(code);
         }
+
+        // 쿠폰수량 입력필드 숫자만 입력가능
+        $(function(){
+            var alerted = false;
+            $('#couponEditQuantity').on('input', function(){
+
+                if(alerted){
+                    alerted = false;
+                    return;
+                }
+
+                const inputVal = $(this).val();
+
+                if(!/^\d+$/.test(inputVal)){
+                    alert('숫자만입력가능합니다.');
+                    alerted = true;
+                    $(this).val('');
+               }
+            });
+        });
 
         // jQuery 달력위젯
         $(function() {
-            $('#CouponEditPeriod').datepicker({
+            $('#couponEditPeriod').datepicker({
                 dateFormat: 'yy-mm-dd',
                 showMonthAfterYear: true,
                 changeYear: true,
                 changeMonth: true,
+                minDate: 0,
                 monthNamesShort: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'],
-                dayNamesMin: ['일','월','화','수','목','금','토']
+                dayNamesMin: ['일','월','화','수','목','금','토'],
+                onSelect: function(dateText){
+                    const dateTime = dateText + " 23:59:59";
+                    $(this).val(dateTime);
+                }
             });
         });
+
 
 
     });

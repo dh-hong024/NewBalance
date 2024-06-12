@@ -330,4 +330,14 @@ public class AdminController {
 
         return respons;
     }
+
+    @PostMapping("/admin/addCoupon")
+    public ResponseEntity<String> addCoupon(@RequestBody CouponDto couponDto){
+        try {
+            couponService.addCoupon(couponDto);
+            return ResponseEntity.ok("성공");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("fail");
+        }
+    }
 }

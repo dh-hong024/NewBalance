@@ -1,11 +1,16 @@
 package practice.newbalance.dto.item;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
+import practice.newbalance.domain.item.Coupon;
 import practice.newbalance.domain.item.CouponEnum;
 import practice.newbalance.domain.member.Member;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 @Builder
 @Getter @Setter
 @NoArgsConstructor
@@ -14,6 +19,8 @@ public class CouponDto {
     private Long id;
     private String benefit;
     private String title;
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime period;
     private String code;
     private CouponEnum status;
@@ -30,5 +37,19 @@ public class CouponDto {
         this.code = code;
         this.status = status;
         this.quantity = quantity;
+    }
+
+    public Coupon toEntity(){
+        Coupon coupon = Coupon.builder()
+                .id(id)
+                .benefit(benefit)
+                .title(title)
+//                .period(LocalDateTime.parse(period.toString(), DateTimeFormatter.ISO_DATE_TIME))
+                .period(period)
+                .code(code)
+                .status(status)
+                .quantity(quantity)
+                .build();
+        return coupon;
     }
 }

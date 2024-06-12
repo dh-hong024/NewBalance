@@ -8,9 +8,13 @@ import java.util.List;
 
 public interface CouponService {
 
+    // 쿠폰 목록
     List<CouponDto> findCouponAll(int offset, int limit);
 
+    // 등록된 쿠폰의 수
     long getCouponCount();
 
-    Coupon getCoupon();
+    // 쿠폰 등록
+    CouponDto addCoupon(CouponDto couponDto);
+
 }

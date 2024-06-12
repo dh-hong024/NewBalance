@@ -33,12 +33,15 @@ public class CouponServiceImpl implements CouponService {
         return couponRepository.count();
     }
 
-    // test용
     @Override
-    public Coupon getCoupon() {
-        return couponRepository.findById(1L).get();
+    public CouponDto addCoupon(CouponDto couponDto) {
+        Coupon coupon = couponRepository.save(couponDto.toEntity());
+        return coupon.toDto();
     }
 
+
+
+    // pessimistic lock
     @Transactional
     public void issueCoupon(long couponId){
         Coupon coupon = couponRepository.findByCouponId(couponId).orElseThrow(() -> new IllegalArgumentException("등록되지 않은 쿠폰입니다."));

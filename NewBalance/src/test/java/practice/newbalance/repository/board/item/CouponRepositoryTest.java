@@ -23,6 +23,7 @@ import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static practice.newbalance.domain.item.CouponEnum.NEW;
 
 @SpringBootTest
 @ActiveProfiles("local")
@@ -49,7 +50,7 @@ class CouponRepositoryTest {
 
     AtomicInteger successCount = new AtomicInteger();
     AtomicInteger failCount = new AtomicInteger();
-        Coupon coupon = new Coupon("benefit","title", LocalDateTime.of(2024, 12, 31, 0, 0), "code", "NEW", 5);
+        Coupon coupon = new Coupon("benefit","title", LocalDateTime.of(2024, 12, 31, 0, 0), "code", NEW, 5);
         Member member = new Member();
         coupon.getMembers().add(member);
 

@@ -9,7 +9,10 @@ public interface CategoryService {
     List<CategoryDto> findByCategory(String title);
 
     CategoryDto addItem(CategoryDto categoryDto);
+
+
     void editItem(Long categoryId, CategoryDto categoryDto);
+
     void deleteItem(Long categoryId);
 
 }

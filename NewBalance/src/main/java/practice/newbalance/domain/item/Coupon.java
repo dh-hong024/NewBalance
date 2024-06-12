@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import practice.newbalance.domain.ModifierEntity;
 import practice.newbalance.domain.member.Member;
+import practice.newbalance.dto.item.CouponDto;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -35,6 +36,7 @@ public class Coupon extends ModifierEntity {
     @Column(name = "code")
     private String code;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "status")
     private CouponEnum status;
 
@@ -44,15 +46,6 @@ public class Coupon extends ModifierEntity {
     //    @JsonIgnore // 양방향 걸린 곳은 꼭 한곳을 설정
     @OneToMany(mappedBy = "coupon")
     private List<Member> members = new ArrayList<>();
-
-    public Coupon(String benefit, String title, LocalDateTime i1, String code, String aNew, int quantity) {
-        this.benefit =benefit;
-        this.title = title;
-        this.period = i1;
-        this.code = code;
-        this.status = CouponEnum.valueOf(aNew);
-        this.quantity = quantity;
-    }
 
     public void addCoupon(Member member){
         members.add(member);
@@ -66,16 +59,25 @@ public class Coupon extends ModifierEntity {
         quantity -= 1;
     }
 
-    @Override
-    public String toString() {
-        return "Coupon{" +
-                "id=" + id +
-                ", benefit='" + benefit + '\'' +
-                ", title='" + title + '\'' +
-                ", period=" + period +
-                ", code='" + code + '\'' +
-                ", status=" + status +
-                ", quantity=" + quantity +
-                '}';
+    public CouponDto toDto(){
+        CouponDto couponDto = CouponDto.builder()
+                .id(id)
+                .benefit(benefit)
+                .title(title)
+                .period(period)
+                .code(code)
+                .status(status)
+                .quantity(quantity)
+                .build();
+        return couponDto;
+    }
+
+    public Coupon(String benefit, String title, LocalDateTime period, String code, CouponEnum status, int quantity) {
+        this.benefit = benefit;
+        this.title = title;
+        this.period = period;
+        this.code = code;
+        this.status = status;
+        this.quantity = quantity;
     }
 }
