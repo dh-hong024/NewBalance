@@ -2,6 +2,9 @@ package practice.newbalance.domain.item;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.http.HttpStatus;
+import practice.newbalance.common.ErrorCode;
+import practice.newbalance.common.exception.CustomException;
 import practice.newbalance.domain.ModifierEntity;
 import practice.newbalance.dto.item.ProductDto;
 
@@ -71,7 +74,7 @@ public class Product extends ModifierEntity {
     public void removeStock(int quantity){
         int restStock = this.quantity - quantity;
         if(restStock < 0){
-
+            throw new CustomException(HttpStatus.BAD_REQUEST, ErrorCode.OUT_OF_STOCK);
         }
         this.quantity = restStock;
     }
