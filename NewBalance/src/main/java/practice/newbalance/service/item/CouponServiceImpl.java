@@ -5,11 +5,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import practice.newbalance.domain.item.Coupon;
 import practice.newbalance.dto.item.CouponDto;
-import practice.newbalance.repository.board.item.CouponRepository;
-import practice.newbalance.repository.board.item.CustomCouponRepository;
+import practice.newbalance.repository.item.CouponRepository;
+import practice.newbalance.repository.item.query.CustomCouponRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class CouponServiceImpl implements CouponService {

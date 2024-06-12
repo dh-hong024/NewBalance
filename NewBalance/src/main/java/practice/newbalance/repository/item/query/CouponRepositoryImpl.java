@@ -1,16 +1,17 @@
-package practice.newbalance.repository.board.item;
+package practice.newbalance.repository.item.query;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import practice.newbalance.dto.item.CouponDto;
+import practice.newbalance.repository.item.query.CustomCouponRepository;
 
 import java.util.List;
 
 import static practice.newbalance.domain.item.QCoupon.coupon;
 
 @Repository
-public class CouponRepositoryImpl implements CustomCouponRepository{
+public class CouponRepositoryImpl implements CustomCouponRepository {
 
     private final JPAQueryFactory queryFactory;
 

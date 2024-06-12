@@ -1,11 +1,10 @@
 package practice.newbalance.web.validator;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import practice.newbalance.dto.item.CategoryDto;
-import practice.newbalance.repository.board.item.CategoryRepository;
+import practice.newbalance.repository.item.CategoryRepository;
 
 
 @RequiredArgsConstructor

@@ -132,6 +132,13 @@
             </ul>
         </li>
 
+        <li class="menu">
+            <a>상품메뉴</a>
+            <ul class="hide">
+                <li><a href="" id="productList">상품관리</a></li>
+            </ul>
+        </li>
+
 
     </ul>
 </div>
@@ -468,6 +475,13 @@
 <!-- coupon Add Modal 끝 -->
 
 
+<!-- product list 시작 -->
+
+
+<!-- product list 끝 -->
+
+
+
 <script th:inline="javascript">
     let pageNumber = 0;
 
@@ -619,6 +633,16 @@
             $('#categoryDivList').hide();
             $('#couponDivList, #loadCouponMore').hide();
             noticeList(offset, limit);
+        });
+
+        $('#productList').click(function(event){
+             event.preventDefault();
+            $('#noticesTable, #loadNoticeMore, #noticeEdit').hide();
+            $('#membersTable, #loadMemberMore').hide();
+            $('#faqsDivList').hide();
+            $('#categoryDivList').hide();
+            $('#couponDivList, #loadCouponMore').hide();
+
         });
 
         // 초기 회원정보 목록 로드

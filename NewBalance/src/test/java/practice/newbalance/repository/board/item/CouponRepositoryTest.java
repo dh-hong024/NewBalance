@@ -1,24 +1,20 @@
 package practice.newbalance.repository.board.item;
 
 import jakarta.persistence.EntityManager;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.PessimisticLockingFailureException;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 import practice.newbalance.domain.item.Coupon;
 import practice.newbalance.domain.member.Member;
+import practice.newbalance.repository.item.CouponRepository;
 import practice.newbalance.service.item.CouponServiceImpl;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -33,7 +29,7 @@ class CouponRepositoryTest {
     private  CouponServiceImpl couponService;
 
     @Autowired
-    private  CouponRepository couponRepository;
+    private CouponRepository couponRepository;
 
     @Autowired
     private EntityManager em;

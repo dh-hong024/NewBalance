@@ -1,4 +1,4 @@
-package practice.newbalance.repository.board.item;
+package practice.newbalance.repository.item.query;
 
 import com.querydsl.jpa.impl.JPAQuery;
 import practice.newbalance.dto.item.CategoryDto;

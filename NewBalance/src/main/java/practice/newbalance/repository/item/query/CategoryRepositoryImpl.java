@@ -1,20 +1,18 @@
-package practice.newbalance.repository.board.item;
+package practice.newbalance.repository.item.query;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.stereotype.Repository;
 import practice.newbalance.domain.item.CategoryEnum;
 import practice.newbalance.domain.item.QCategory;
 import practice.newbalance.dto.item.CategoryDto;
+import practice.newbalance.repository.item.query.CustomCategoryRepository;
 
 import java.util.List;
 
-import static practice.newbalance.domain.item.QCategory.category;
-
 @Repository
-public class CategoryRepositoryImpl implements CustomCategoryRepository{
+public class CategoryRepositoryImpl implements CustomCategoryRepository {
 
     private final JPAQueryFactory queryFactory;
 

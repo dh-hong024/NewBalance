@@ -1,4 +1,4 @@
-package practice.newbalance.repository.board.item;
+package practice.newbalance.repository.item.query;
 
 import practice.newbalance.dto.item.CouponDto;
 

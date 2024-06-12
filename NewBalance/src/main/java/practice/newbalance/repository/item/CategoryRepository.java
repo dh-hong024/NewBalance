@@ -1,4 +1,4 @@
-package practice.newbalance.repository.board.item;
+package practice.newbalance.repository.item;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import practice.newbalance.domain.item.Category;

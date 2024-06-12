@@ -1,13 +1,12 @@
 package practice.newbalance.service.item;
 
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import practice.newbalance.domain.item.Category;
 import practice.newbalance.dto.item.CategoryDto;
-import practice.newbalance.repository.board.item.CategoryRepository;
-import practice.newbalance.repository.board.item.CustomCategoryRepository;
+import practice.newbalance.repository.item.CategoryRepository;
+import practice.newbalance.repository.item.query.CustomCategoryRepository;
 
 import java.util.List;
 import java.util.Optional;

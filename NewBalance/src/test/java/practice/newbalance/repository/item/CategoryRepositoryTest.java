@@ -1,6 +1,5 @@
 package practice.newbalance.repository.item;
 
-import com.querydsl.jpa.impl.JPAQuery;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.assertj.core.api.Assertions;
@@ -12,14 +11,11 @@ import org.springframework.transaction.annotation.Transactional;
 import practice.newbalance.domain.item.Category;
 import practice.newbalance.domain.item.CategoryEnum;
 import practice.newbalance.dto.item.CategoryDto;
-import practice.newbalance.repository.board.item.CategoryRepository;
-import practice.newbalance.repository.board.item.CategoryRepositoryImpl;
-import practice.newbalance.repository.board.item.CustomCategoryRepository;
+import practice.newbalance.repository.item.query.CategoryRepositoryImpl;
 
 import java.util.List;
 
 import static practice.newbalance.domain.item.CategoryEnum.MEN;
-import static practice.newbalance.domain.item.CategoryEnum.WOMEN;
 
 @SpringBootTest
 @ActiveProfiles("local")
