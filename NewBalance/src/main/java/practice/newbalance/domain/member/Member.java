@@ -45,7 +45,7 @@ public class Member {
     @Column(name = "role")
     private String role;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "coupon_id")
     private Coupon coupon;
 
@@ -63,6 +63,11 @@ public class Member {
                 .role(role)
                 .build();
         return memberDto;
+    }
+
+    public void addCoupon(Coupon coupon){
+        this.coupon = coupon;
+        coupon.getMembers().add(this);
     }
 
 }

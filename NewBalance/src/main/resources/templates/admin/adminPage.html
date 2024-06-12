@@ -2,7 +2,9 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
@@ -45,12 +47,15 @@
         text-decoration: none;
         cursor: pointer;
     }
-    #noticesTable, #noticeEdit, #loadNoticeMore, #membersTable, #loadMemberMore, #faqsDivList,#categoryDivList {
+    #noticesTable, #noticeEdit, #loadNoticeMore, #membersTable, #loadMemberMore, #faqsDivList, #categoryDivList, #couponDivList, #loadCouponMore {
         display: none;
     }
 
     .tabs > .tab-item > a{
         color: black;
+    }
+    .tab_list > col3{
+        float: left;
     }
     .tabs > .tab-item {
         float: left;
@@ -93,8 +98,6 @@
         display: flex;
         gap: 5px; /* 버튼들 사이의 간격 */
     }
-
-
 </style>
 <h2>관리자페이지</h2>
 <!-- 메뉴 토글 시작 -->
@@ -121,6 +124,14 @@
                 <li><a href="" id="categoryList">카테고리관리</a></li>
             </ul>
         </li>
+
+        <li class="menu">
+            <a>쿠폰메뉴</a>
+            <ul class="hide">
+                <li><a href="" id="couponList">쿠폰관리</a></li>
+            </ul>
+        </li>
+
 
     </ul>
 </div>
@@ -396,8 +407,64 @@
         </div>
     </ul>
 </div>
-
 <!-- category menu 끝-->
+
+<!-- coupon 목록 시작 -->
+<div id="couponDivList">
+    <div>
+        <div id="couponAdd">
+            <h2>쿠폰등록</h2>
+            <button id="couponEditBtn" sec:authorize="hasRole('ROLE_ADMIN')">등록</button>
+        </div>
+        <h2>쿠폰목록</h2>
+        <table id="couponTable">
+            <thead>
+                <tr>
+                    <th>혜택</th>
+                    <th>쿠폰명</th>
+                    <th>사용기간</th>
+                    <th>수량</th>
+                    <th>상태</th>
+                </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
+        <button id="loadCouponMore">더보기</button>
+    </div>
+</div>
+
+<!-- coupon 목록 끝 -->
+
+<!-- coupon Add Modal 시작 -->
+<div id="CouponEditModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <form id="CouponModalForm">
+            <p>title<input type="text" id="CouponEditTitle"></p>
+            <p>code<input type="text" id="CouponEditCode"></p> <button type="button" id="randomCodeBtn">코드생성</button>
+            <p>period<input type="text" id="CouponEditPeriod"></p>
+            <p>benefit
+                <select id="CouponEditBenefit">
+                    <option value="5">5%</option>
+                    <option value="10">10%</option>
+                    <option value="15">15%</option>
+                    <option value="20">20%</option>
+                    <option value="25">25%</option>
+                    <option value="30">30%</option>
+                </select>
+            </p>
+            <p>quantity<input type="text" id="CouponEditQuantity"></p>
+            <div>
+                <button type="button" id="editCouponBtn" class="btn btn-primary"  sec:authorize="hasRole('ROLE_ADMIN')">등록</button>
+                <button type="button" id="cancelEditCouponBtn" class="btn btn-primary"  sec:authorize="hasRole('ROLE_ADMIN')">취소</button>
+            </div>
+        </form>
+    </div>
+</div>
+<!-- coupon Add Modal 끝 -->
+
 
 <script th:inline="javascript">
     let pageNumber = 0;
@@ -423,7 +490,7 @@
         });
 
         // 공지사항 목록 로드
-        function noticeList(append = false) {
+        function noticeList(append = false) { // append가 true일 경우 기존 목록 유지하고 새로 가져온 목록내용추가 더보기 버튼 클릭시 true
             $.ajax({
                 url: '/admin/notices',
                 type: 'GET',
@@ -431,7 +498,7 @@
                 dataType: 'json',
                 success: function (response) {
                     const noticeTableBody = $('#noticesTable tbody');
-                    if (!append) noticeTableBody.empty();
+                    if (!append) noticeTableBody.empty(); // append가 false면 기존 목록을 지움
                     $.each(response.notices, function (index, notice) {
                         const row = $('<tr>');
                         row.html(`
@@ -494,6 +561,38 @@
             });
         }// 회원목록 로드 끝
 
+        // 쿠폰목록 로드 시작
+        function couponList(append = false){
+            $.ajax({
+               url: '/admin/coupons',
+               type: 'GET',
+               dataType: 'json',
+                success:function(response){
+                const couponTable = $('#couponTable tbody');
+                if(!append) couponTable.empty();
+                $.each(response.coupons, function(index, coupon){
+                    console.log(coupon.id);
+                   const row = $('<tr>');
+                   row.html(`
+                        <td>${coupon.benefit}</td>
+                        <td>${coupon.title}</td>
+                        <td>${coupon.period}</td>
+                        <td>${coupon.quantity}</td>
+                        <td>${coupon.status}</td>
+                   `);
+                   couponTable.append(row);
+                });
+                    const remingCount = Math.max(0, response.totalCoupon - (offset + limit));
+                    $('#loadCouponMore').text('더보기(' + remingCount + ')');
+                    if (remingCount <= 0) {
+                        $('#loadCouponMore').hide();
+                    } else {
+                        $('#loadCouponMore').show();
+                    }
+                }
+            });
+        }
+
 
         // 공지사항 링크 클릭 모달 핸들러
         function showNoticeModal(event) {
@@ -515,6 +614,7 @@
             $('#membersTable, #loadMemberMore').hide();
             $('#faqsDivList').hide();
             $('#categoryDivList').hide();
+            $('#couponDivList, #loadCouponMore').hide();
             noticeList(offset, limit);
         });
 
@@ -525,6 +625,7 @@
             $('#faqsDivList').hide();
             $('#noticesTable, #loadNoticeMore, #noticeEdit').hide();
             $('#categoryDivList').hide();
+            $('#couponDivList, #loadCouponMore').hide();
             memberList(offset, limit);
         });
 
@@ -534,9 +635,21 @@
             $('#noticesTable, #loadNoticeMore, #noticeEdit').hide();
             $('#membersTable, #loadMemberMore').hide();
             $('#faqsDivList').hide();
+            $('#couponDivList, #loadCouponMore').hide();
             $('#categoryDivList').show();
             $('.tab-item[data-title="MEN"]').addClass('active');
-            CategoryList('MEN');
+            categoryList('MEN');
+        });
+
+        // coupon 목록 로드
+        $('#couponList').click(function(event){
+           event.preventDefault();
+            $('#noticesTable, #loadNoticeMore, #noticeEdit').hide();
+            $('#membersTable, #loadMemberMore').hide();
+            $('#faqsDivList').hide();
+            $('#categoryDivList').hide();
+            $('#couponDivList').show();
+            couponList(offset, limit);
         });
 
         // 공지사항 더보기 버튼 클릭 이벤트
@@ -549,8 +662,14 @@
         $('#loadMemberMore').click(function () {
             offset += limit;
             memberList(offset, limit);
-        })
+        });
 
+        $('#loadCouponMore').click(function (){
+           offset += limit;
+           couponList(offset, limit);
+        });
+
+        // 날짜 포맷
         function formatDate(dateString) {
             const date = new Date(dateString);
             const year = date.getFullYear();
@@ -615,10 +734,15 @@
             $('#noticeModal').hide();
             $('#faqEditModal').hide();
             $('#faqUpdateModal').hide();
+            $('#CouponEditModal').hide();
         });
 
         $('#cancelEditFaqBtn').click(function () {
             $('#faqEditModal').hide();
+        });
+
+        $('#cancelEditCouponBtn').click(function(){
+            $('#CouponEditModal').hide();
         });
 
         $(window).click(function (event) {
@@ -628,6 +752,8 @@
                 $('#faqEditModal').hide();
             } else if (event.target === $('#faqUpdateModal')[0]) {
                 $('#faqUpdateModal').hide();
+            } else if(event.target === $('#CouponEditModal')[0]) {
+                $('#CouponEditModal').hide();
             }
         });
 
@@ -648,6 +774,18 @@
             event.preventDefault();
             $('#faqEditModal').show();
             loadTagList();
+        });
+
+        $('#couponEditBtn').click(function (event) {
+           event.preventDefault();
+
+            $('#CouponEditTitle').val('');
+            $('#CouponEditCode').val('');
+            $('#CouponEditPeriod').val('');
+            $('#CouponEditBenefit').val('5');
+            $('#CouponEditQuantity').val('');
+            $('#CouponEditModal').show();
+
         });
 
         // faq SelectBox Tag 목록 로드
@@ -960,7 +1098,7 @@
         });
 
         // 카테고리 목록 시작
-        function CategoryList(title){
+        function categoryList(title){
             $.ajax({
                 url: '/admin/categoryList',
                 type: 'GET',
@@ -1040,7 +1178,7 @@
             // 현재 설정된 탭의 타이틀 가져오기
             const title = $(this).data('title');
 
-            CategoryList(title);
+            categoryList(title);
             $('#depth_1, #depth_2, #depth_3, #depth_4, #depth_5, #depth_6, #depth_7').val('');
         });
 
@@ -1068,15 +1206,15 @@
                         const newId = data.id
                         $('#' + getSelectedListId(title)[ref - 1]).append('<li id="' + newId + '" data-step="' + step + '">' + text + '</li>');
                         $('#depth_' + ref).val('');
-                        CategoryList(title);
+                        categoryList(title);
                     } else if (action === 'editItem') {
                         selectedText.text(text);
                         $('#depth_' + ref).val('');
-                        CategoryList(title);
+                        categoryList(title);
                     } else if (action === 'deleteItem') {
                         selectedText.remove();
                         $('#depth_' + ref).val('');
-                        CategoryList(title);
+                        categoryList(title);
                     }
                 },
                 error: function(xhr, status, error) {
@@ -1154,6 +1292,7 @@
            }
         });
 
+        // 동적 li태그 추가 시 높이 자동맞춤
         function ulListHeight() {
             const uls = document.querySelectorAll('.depth ul');
             let maxHeight = 0;
@@ -1169,6 +1308,34 @@
                 ul.style.height = maxHeight + 'px';
             });
         }
+
+        // 쿠폰코드 생성 버튼 호출
+        $('#randomCodeBtn').click(function(){
+            randomCode();
+        });
+
+        // 쿠폰코드 생성 함수
+        function randomCode(){
+            let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            let code = '';
+            for (let i = 0; i < 9; i++ ) {
+                code += characters.charAt(Math.floor(Math.random() * characters.length));
+            }
+            $('#CouponEditCode').val(code);
+        }
+
+        // jQuery 달력위젯
+        $(function() {
+            $('#CouponEditPeriod').datepicker({
+                dateFormat: 'yy-mm-dd',
+                showMonthAfterYear: true,
+                changeYear: true,
+                changeMonth: true,
+                monthNamesShort: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'],
+                dayNamesMin: ['일','월','화','수','목','금','토']
+            });
+        });
+
 
     });
 </script>

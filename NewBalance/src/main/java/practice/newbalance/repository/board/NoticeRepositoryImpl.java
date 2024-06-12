@@ -12,10 +12,14 @@ import static practice.newbalance.domain.board.QNotice.notice;
 
 
 @Repository
-public class NoticeRepositoryImpl implements NoticeRepositoryCustom {
+public class NoticeRepositoryImpl implements CustomNoticeRepository {
+
+    private final JPAQueryFactory queryFactory;
 
     @Autowired
-    private JPAQueryFactory queryFactory;
+    public NoticeRepositoryImpl(JPAQueryFactory queryFactory) {
+        this.queryFactory = queryFactory;
+    }
 
     @Override
     public List<NoticeDto> findNoticeAll(int offset, int limit) {

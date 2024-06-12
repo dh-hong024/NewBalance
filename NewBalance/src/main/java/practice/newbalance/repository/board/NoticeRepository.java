@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import practice.newbalance.domain.board.Notice;
 
-public interface NoticeRepository extends JpaRepository<Notice, Long>, NoticeRepositoryCustom  {
+public interface NoticeRepository extends JpaRepository<Notice, Long>, CustomNoticeRepository {
 
     Notice findNoticeById(Long id);
 

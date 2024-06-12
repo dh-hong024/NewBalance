@@ -1,6 +1,7 @@
 package practice.newbalance.controller;
 
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,11 +13,13 @@ import practice.newbalance.domain.board.Notice;
 import practice.newbalance.dto.board.FaqDto;
 import practice.newbalance.dto.board.NoticeDto;
 import practice.newbalance.dto.item.CategoryDto;
+import practice.newbalance.dto.item.CouponDto;
 import practice.newbalance.dto.member.MemberDto;
 import practice.newbalance.service.MemberService;
 import practice.newbalance.service.board.FaqServiceImpl;
 import practice.newbalance.service.board.NoticeService;
 import practice.newbalance.service.item.CategoryService;
+import practice.newbalance.service.item.CouponService;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -30,11 +33,15 @@ public class AdminController {
     private final MemberService memberService;
     private final FaqServiceImpl faqService;
     private final CategoryService categoryService;
-    public AdminController(NoticeService noticeService, MemberService memberService, FaqServiceImpl faqService, CategoryService categoryService) {
+    private  final CouponService couponService;
+
+    @Autowired
+    public AdminController(NoticeService noticeService, MemberService memberService, FaqServiceImpl faqService, CategoryService categoryService, CouponService couponService) {
         this.noticeService = noticeService;
         this.memberService = memberService;
         this.faqService = faqService;
         this.categoryService = categoryService;
+        this.couponService = couponService;
     }
 
     @GetMapping("/admin-page")
@@ -247,6 +254,9 @@ public class AdminController {
         return response;
     }
 
+    /**
+     * 카테고리list
+     */
     @GetMapping("/admin/categoryList")
     @ResponseBody
     public Map<String, Object> categoryList(
@@ -260,6 +270,9 @@ public class AdminController {
         return response;
     }
 
+    /**
+     * 카테고리 메뉴 추가
+     */
     @PostMapping("/admin/addItem")
     public ResponseEntity<String> addItem(@RequestBody CategoryDto categoryDto) {
         try{
@@ -270,6 +283,9 @@ public class AdminController {
         }
     }
 
+    /**
+     * 카테고리 메뉴 수정
+     */
     @PostMapping(value = "/admin/editItem/{categoryId}")
     public ResponseEntity<String> editItem(@PathVariable("categoryId") Long categoryId,
                                            @RequestBody CategoryDto categoryDto) {
@@ -281,6 +297,9 @@ public class AdminController {
         }
     }
 
+    /**
+     * 카테고리 메뉴 삭제
+     */
     @PostMapping("/admin/deleteItem/{categoryId}")
     public ResponseEntity<String> deleteItem(@PathVariable("categoryId") Long categoryId) {
         try{
@@ -289,5 +308,26 @@ public class AdminController {
         }catch (Exception e){
             return ResponseEntity.noContent().build();
         }
+    }
+
+    /**
+     * 쿠폰list
+     * @return
+     */
+    @GetMapping(value = "/admin/coupons")
+    @ResponseBody
+    public Map<String, Object> couponList(
+            @RequestParam(name = "offset", defaultValue = "0") int offset,
+            @RequestParam(name = "limit", defaultValue = "20") int limit){
+
+        List<CouponDto> coupons =  couponService.findCouponAll(offset, limit);
+        long totalCoupon = couponService.getCouponCount();
+
+        Map<String, Object> respons = new HashMap<>();
+
+        respons.put("coupons", coupons);
+        respons.put("totalCoupon", totalCoupon);
+
+        return respons;
     }
 }
