@@ -65,8 +65,8 @@
                             </div>
                             <div id="cart_item_content" class="cart_content">
                                 <a href="" th:text="${cart.getProduct().getTitle()}"></a>
-                                <p><span th:text="${cart.getProduct().getSize()}"></span> , <span th:text="${cart.getProduct().getColor()}"></span></p>
-                                <span th:text="${cart.getProduct().getPrice()}"></span>
+                                <p><span th:text="${cart.getProductOption().getSize()}"></span> , <span th:text="${cart.getProductOption().getColor()}"></span></p>
+                                <span th:text="${cart.getPrice()}"></span>
                                 <a href="#" th:onclick="|updateCartOption()|">변경</a>
                             </div>
 

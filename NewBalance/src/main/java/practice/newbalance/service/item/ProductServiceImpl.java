@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import practice.newbalance.common.ErrorCode;
 import practice.newbalance.common.exception.CustomException;
 import practice.newbalance.domain.item.Cart;
 import practice.newbalance.domain.item.Product;
@@ -18,6 +19,7 @@ import practice.newbalance.dto.item.ProductOptionDto;
 import practice.newbalance.dto.item.ProductOptionDtoDetails;
 import practice.newbalance.repository.MemberRepository;
 import practice.newbalance.repository.item.CartRepository;
+import practice.newbalance.repository.item.ProductOptionRepository;
 import practice.newbalance.repository.item.ProductRepository;
 
 import java.util.HashMap;
@@ -33,6 +35,7 @@ public class ProductServiceImpl implements ProductService{
     private final MemberRepository memberRepository;
     private final CartRepository cartRepository;
     private final ProductRepository productRepository;
+    private final ProductOptionRepository optionRepository;
 
     @Transactional
     @Override
@@ -91,18 +94,24 @@ public class ProductServiceImpl implements ProductService{
     //장바구니 상품 추가
     @Transactional
     @Override
-    public Long addCart(Long memberId, String title, String size, String color, int count) {
+    public void addCart(Long memberId, Long productId, String size, String color, int count) {
+        //멤버 조회
         Member member = memberRepository.findById(memberId).orElseThrow(
                 () -> new CustomException(HttpStatus.BAD_REQUEST, ErrorCode.NOT_EXISTED_DATA)
         );
 
-        Product product = productRepository.findProductByOption(size, color, title);
+        //상품 조회
+        Product product = productRepository.findById(productId).orElseThrow(
+                () -> new CustomException(HttpStatus.BAD_REQUEST, ErrorCode.NOT_EXISTED_DATA)
+        );
 
-        Cart cart = Cart.createCart(member, product, product.getPrice() * count, count);
-        cartRepository.save(cart);
-
-        return cart.getId();
-
+        //option 조회 및 cart 생성
+        product.getProductOptions().stream()
+                .filter(p -> p.getColor().equals(color) && p.getSize().equals(size))
+                .forEach(productOption -> {
+                    Cart cart = Cart.createCart(member, product, productOption, product.getPrice() * count, count);
+                    cartRepository.save(cart);
+                });
     }
 
     //장바구니 상품 삭제
@@ -129,14 +138,21 @@ public class ProductServiceImpl implements ProductService{
     //장바구니 상품 수정
     @Transactional
     @Override
-    public void updateCart(Long cartId, String title, String size, String color, int count) {
+    public void updateCart(Long cartId, Long productId, String size, String color, int count) {
         Cart cart = cartRepository.findById(cartId).orElseThrow(
                 () -> new CustomException(HttpStatus.BAD_REQUEST, ErrorCode.NOT_EXISTED_DATA)
         );
-        Product productByOption = productRepository.findProductByOption(size, color, title);
-        cart.saveItem(cart, productByOption, productByOption.getPrice() * count, count);
 
-        cartRepository.save(cart);
+        Product product = productRepository.findById(productId).orElseThrow(
+                () -> new CustomException(HttpStatus.BAD_REQUEST, ErrorCode.NOT_EXISTED_DATA)
+
+        );
+        product.getProductOptions().stream()
+                .filter(p -> p.getColor().equals(color) && p.getSize().equals(size))
+                .forEach(
+                        productOption -> cart.saveItem(cart, product, productOption, product.getPrice() * count, count)
+                );
+
     }
 }
 

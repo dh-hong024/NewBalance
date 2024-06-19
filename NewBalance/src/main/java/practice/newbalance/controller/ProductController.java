@@ -38,13 +38,12 @@ public class ProductController {
 
     @PostMapping("/product/addOptions")
     @ResponseBody
-    public ResponseEntity<String> testOption(ProductDto productDto)  {
+    public ResponseEntity<String> addProduct(ProductDto productDto)  {
         productService.addProduct(productDto);
 
         return ResponseEntity.ok("sucess");
     }
 
-    private final ProductService productService;
 
     @GetMapping("/my/cart")
     public String cartHome(
@@ -62,7 +61,7 @@ public class ProductController {
             CartDto dto
     ){
         productService.addCart(
-                customUserDetail.getMember().getId(), dto.getTitle(),
+                customUserDetail.getMember().getId(), dto.getProductId(),
                 dto.getSize(), dto.getColor(), dto.getCount()
         );
         return ResponseEntity.ok("success");
@@ -74,7 +73,7 @@ public class ProductController {
             @PathVariable("cartId") Long cartId,
             CartDto dto
     ){
-        productService.updateCart(cartId, dto.getTitle(), dto.getSize(), dto.getColor(), dto.getCount());
+        productService.updateCart(cartId, dto.getProductId(), dto.getSize(), dto.getColor(), dto.getCount());
         return ResponseEntity.ok("success");
     }
 

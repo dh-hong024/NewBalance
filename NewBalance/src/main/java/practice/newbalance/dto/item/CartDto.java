@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class CartDto {
-    private String title;
+    private Long productId;
     private String color;
     private String size;
     private int count;

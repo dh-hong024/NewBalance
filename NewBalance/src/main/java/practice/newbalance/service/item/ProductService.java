@@ -13,9 +13,9 @@ public interface ProductService {
     Map<String, Object>imgUpload(MultipartFile img);
 
     Product addProduct(ProductDto productDto);
-    Long addCart(Long memberId, String title, String size, String color, int count);
+    void addCart(Long memberId, Long productId, String size, String color, int count);
     void delCart(Long cartId);
     void delAllCart(Long memberId);
     List<Cart> findCartAll(Long memberId);
-    void updateCart(Long cartId, String title, String size, String color, int count);
+    void updateCart(Long cartId, Long productId, String size, String color, int count);
 }
