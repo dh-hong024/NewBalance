@@ -2,13 +2,12 @@ package practice.newbalance.domain.item;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.http.HttpStatus;
-import practice.newbalance.common.ErrorCode;
-import practice.newbalance.common.exception.CustomException;
 import practice.newbalance.domain.ModifierEntity;
 import practice.newbalance.dto.item.ProductDto;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter @Setter
@@ -32,14 +31,8 @@ public class Product extends ModifierEntity {
     @Column(name = "content")
     private String content;
 
-    @Column(name = "price")
-    private int price;
-
-    @Column(name = "color")
-    private String color;
-
-    @Column(name = "size")
-    private String size;
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ProductOption> productOptions = new ArrayList<>();
 
     @Column(name = "code")
     private String code;
@@ -53,48 +46,32 @@ public class Product extends ModifierEntity {
     @Column(name = "features")
     private String features;
 
+    @Column(name = "price")
+    private int price;
+
     @Column(name = "manufacture_date")
     private LocalDateTime manufactureDate;
-
-    @Column(name = "quantity")
-    private int quantity;
-
-    /**
-     * 상품 수량 증가
-     * @param quantity
-     */
-    public void addStock(int quantity){
-        this.quantity += quantity;
-    }
-
-    /**
-     * 상품 수량 감소
-     * @param quantity
-     */
-    public void removeStock(int quantity){
-        int restStock = this.quantity - quantity;
-        if(restStock < 0){
-            throw new CustomException(HttpStatus.BAD_REQUEST, ErrorCode.OUT_OF_STOCK);
-        }
-        this.quantity = restStock;
-    }
 
     public ProductDto toDTO(){
         return ProductDto.builder()
                 .id(id)
                 .title(title)
                 .content(content)
-                .price(price)
-                .color(color)
-                .size(size)
+                .productOptions(productOptions)
                 .code(code)
-                .contry(contry)
-                .material(material)
-                .features(features)
-                .manufactureDate(manufactureDate)
-                .category(category)
-                .quantity(quantity)
+//                .contry(contry)
+//                .material(material)
+//                .features(features)
+//                .price(price)
+//                .manufactureDate(manufactureDate)
+//                .category(category)
                 .build();
+    }
+
+    // option 편의 메서드
+    public void addOption(ProductOption productOption){
+        productOption.setProduct(this);
+        this.productOptions.add(productOption);
     }
 
 }
