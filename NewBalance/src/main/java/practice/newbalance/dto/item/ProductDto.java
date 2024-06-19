@@ -1,16 +1,17 @@
 package practice.newbalance.dto.item;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 import practice.newbalance.domain.item.Category;
 import practice.newbalance.domain.item.Product;
+import practice.newbalance.domain.item.ProductOption;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Builder
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class ProductDto {
 
     private long id;
@@ -19,11 +20,7 @@ public class ProductDto {
 
     private String content;
 
-    private int price;
-
-    private String color;
-
-    private String size;
+    private List<ProductOption> productOptions;
 
     private String code;
 
@@ -33,27 +30,27 @@ public class ProductDto {
 
     private String features;
 
+    private int price;
+
     private LocalDateTime manufactureDate;
 
     private Category category;
 
-    private int quantity;
+    private String option;
 
     public Product toEntity(){
         return Product.builder()
                 .id(id)
                 .title(title)
                 .content(content)
-                .price(price)
-                .color(color)
-                .size(size)
+                .productOptions(productOptions)
                 .code(code)
-                .contry(contry)
-                .material(material)
-                .features(features)
-                .manufactureDate(manufactureDate)
-                .category(category)
-                .quantity(quantity)
+//                .contry(contry)
+//                .material(material)
+//                .features(features)
+//                .price(price)
+//                .manufactureDate(manufactureDate)
+//                .category(category)
                 .build();
     }
 }
