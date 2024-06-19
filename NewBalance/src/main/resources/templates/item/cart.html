@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/config/defaultLayout}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="/css/common/common.css">
+    <link rel="stylesheet" href="/css/item/cart.css">
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        function updateCartCount(){
+            console.log("count");
+            return false;
+        }
+
+        function updateCartOption(){
+            console.log("option")
+            return false;
+        }
+
+        function delCartItem(cartId){
+            console.log(cartId);
+            $.ajax({
+                url : "/my/cart/" + cartId,
+                method : "DELETE",
+                success : (response) => {
+                    location.href="/my/cart"
+                }
+            });
+        }
+        /*]]>*/
+    </script>
+</head>
+<body>
+<div class="container" layout:fragment="content">
+    <div class="tt_step">
+        <p><span class="order_flow" id="cart">장바구니</span><span class="order_flow" id="order">주문/결제</span><span class="order_flow" id="complete">주문완료</span></p>
+    </div>
+    <div class="title">
+        <h2>장바구니</h2>
+        <p>총 <span id="cart_count" th:text="${cartList.size()}"></span>개</p>
+    </div>
+    <div class="cartTable">
+        <table>
+            <thead>
+                <th id="cartCheckBox"></th>
+                <th id="productInfo">상품/옵션정보</th>
+                <th id="quantity">수량</th>
+                <th id="price">주문금액</th>
+                <th id="button"></th>
+            </thead>
+            <tbody>
+                <tr id="cartRow" th:each="cart : ${cartList}">
+                    <td style="text-align: center">
+                        <input type="checkbox" id="isOrder">
+                    </td>
+                    <td>
+                        <div class="pr">
+                            <div id="cart_item_img" class="cart_content">
+                                <img src="#" alt="#">
+                            </div>
+                            <div id="cart_item_content" class="cart_content">
+                                <a href="" th:text="${cart.getProduct().getTitle()}"></a>
+                                <p><span th:text="${cart.getProduct().getSize()}"></span> , <span th:text="${cart.getProduct().getColor()}"></span></p>
+                                <span th:text="${cart.getProduct().getPrice()}"></span>
+                                <a href="#" th:onclick="|updateCartOption()|">변경</a>
+                            </div>
+
+                        </div>
+                    </td>
+                    <td style="text-align: center">
+                        <p>
+                            <select name="" id="">
+                                <option value="" th:text="${cart.getCount()}" th:value="${cart.getCount()}"></option>
+                            </select>
+                            <a href="#" th:onclick="|updateCartCount()|">변경</a>
+                        </p>
+                    </td>
+                    <td style="text-align: center">
+                        <p th:text="${cart.getPrice()}"></p>
+                    </td>
+                    <td style="text-align: center">
+                        <p><a type="button" href="" id="cart_order_btn" class="cart_btn">주문하기</a></p><br>
+                        <p><a href="#" id="cart_delete_btn" class="cart_btn" th:onclick="|delCartItem(${cart.getId()})|">삭제하기</a></p>
+                    </td>
+                </tr>
+            </tbody>
+
+        </table>
+    </div>
+
+</div>
+</body>
+</html>
