@@ -12,18 +12,26 @@
     <link rel="stylesheet" href="/css/item/cart.css">
     <script th:inline="javascript">
         /*<![CDATA[*/
-        function updateCartCount(){
-            console.log("count");
-            return false;
+        function updateCartCount(cartId){
+            let data = {
+                "count" : $("#count").val()
+            }
+            $.ajax({
+                method: "PUT",
+                url: "/my/cart/count/" + cartId,
+                data: data,
+                success : () => {
+                    location.href="/my/cart";
+                }
+            })
         }
 
-        function updateCartOption(){
-            console.log("option")
+        function updateCartOption(cartId){
+            console.log("option" + cartId)
             return false;
         }
 
         function delCartItem(cartId){
-            console.log(cartId);
             $.ajax({
                 url : "/my/cart/" + cartId,
                 method : "DELETE",
@@ -67,17 +75,17 @@
                                 <a href="" th:text="${cart.getProduct().getTitle()}"></a>
                                 <p><span th:text="${cart.getProductOption().getSize()}"></span> , <span th:text="${cart.getProductOption().getColor()}"></span></p>
                                 <span th:text="${cart.getPrice()}"></span>
-                                <a href="#" th:onclick="|updateCartOption()|">변경</a>
+                                <a href="#" th:onclick="|updateCartOption(${cart.getId()})|">변경</a>
                             </div>
 
                         </div>
                     </td>
                     <td style="text-align: center">
                         <p>
-                            <select name="" id="">
-                                <option value="" th:text="${cart.getCount()}" th:value="${cart.getCount()}"></option>
+                            <select name="count" id="count">
+                                <option value="" th:each="count : ${countList}" th:value="${count}" th:text="${count}" th:selected="${count} == ${cart.getCount()}"></option>
                             </select>
-                            <a href="#" th:onclick="|updateCartCount()|">변경</a>
+                            <a href="#" th:onclick="|updateCartCount(${cart.getId()})|">변경</a>
                         </p>
                     </td>
                     <td style="text-align: center">

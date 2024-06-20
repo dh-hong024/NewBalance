@@ -6,13 +6,10 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import practice.newbalance.domain.item.Product;
-import practice.newbalance.domain.item.ProductOption;
 import practice.newbalance.dto.item.ProductDto;
-import practice.newbalance.dto.item.ProductOptionDto;
-import practice.newbalance.dto.item.ProductOptionDtoDetails;
 import practice.newbalance.service.item.ProductService;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import org.springframework.ui.Model;
@@ -51,7 +48,12 @@ public class ProductController {
             Model model
     ){
         List<Cart> cartAll = productService.findCartAll(customUserDetail.getMember().getId());
+        List<String> countList = new ArrayList<>();
+        for(int i = 0; i < 10; i++){
+            countList.add(String.valueOf(i+1));
+        }
         model.addAttribute("cartList", cartAll);
+        model.addAttribute("countList", countList);
         return "item/cart";
     }
 
@@ -67,13 +69,19 @@ public class ProductController {
         return ResponseEntity.ok("success");
     }
 
-    @PutMapping("/my/cart/{cartId}")
+    @PutMapping("/my/cart/option/{cartId}")
     public ResponseEntity<String> updateCart(
             @AuthenticationPrincipal CustomUserDetail customUserDetail,
             @PathVariable("cartId") Long cartId,
             CartDto dto
     ){
         productService.updateCart(cartId, dto.getProductId(), dto.getSize(), dto.getColor(), dto.getCount());
+        return ResponseEntity.ok("success");
+    }
+
+    @PutMapping("/my/cart/count/{cartId}")
+    public ResponseEntity<String> updateCartCount(@PathVariable("cartId") Long cartId, @RequestParam("count") int count){
+        productService.updateCartCount(cartId, count);
         return ResponseEntity.ok("success");
     }
 

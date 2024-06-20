@@ -18,4 +18,5 @@ public interface ProductService {
     void delAllCart(Long memberId);
     List<Cart> findCartAll(Long memberId);
     void updateCart(Long cartId, Long productId, String size, String color, int count);
+    void updateCartCount(Long cartId, int count);
 }

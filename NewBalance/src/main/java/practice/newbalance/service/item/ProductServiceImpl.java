@@ -154,5 +154,15 @@ public class ProductServiceImpl implements ProductService{
                 );
 
     }
+
+    @Transactional
+    @Override
+    public void updateCartCount(Long cartId, int count) {
+        Cart cart = cartRepository.findById(cartId).orElseThrow(
+                () -> new CustomException(HttpStatus.BAD_REQUEST, ErrorCode.NOT_EXISTED_DATA)
+        );
+        cart.setCount(count);
+        cart.setPrice(cart.getProduct().getPrice() * count);
+    }
 }
 
