@@ -19,12 +19,11 @@ import practice.newbalance.dto.item.ProductOptionDto;
 import practice.newbalance.dto.item.ProductOptionDtoDetails;
 import practice.newbalance.repository.MemberRepository;
 import practice.newbalance.repository.item.CartRepository;
-import practice.newbalance.repository.item.ProductOptionRepository;
 import practice.newbalance.repository.item.ProductRepository;
+import practice.newbalance.repository.item.query.CustomProductRepository;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -35,7 +34,7 @@ public class ProductServiceImpl implements ProductService{
     private final MemberRepository memberRepository;
     private final CartRepository cartRepository;
     private final ProductRepository productRepository;
-    private final ProductOptionRepository optionRepository;
+    private final CustomProductRepository customProductRepository;
 
     @Transactional
     @Override
@@ -55,6 +54,40 @@ public class ProductServiceImpl implements ProductService{
         json.put("uploaded", 1);
         json.put("fileName", imgFolder);
         json.put("url", folder + "/" + imgFolder);
+        return json;
+    }
+
+    @Override
+    public Map<String, Object> getProductOption(Long productId) {
+        //product option 테이블 조회
+        List<ProductOptionDto> productOption = customProductRepository.getProductOption(productId);
+
+        //컬러 중복 제거
+        Set<String> colorSet = productOption.stream().map(ProductOptionDto::getColor).collect(Collectors.toSet());
+
+        //json 데이터 option 부분 생성
+        // 컬러별 사이즈 리스트를 json 형태로 반환하기 위해 세팅
+        List<Map<String, Object>> option = new ArrayList<>();
+        colorSet.forEach(color -> {
+            Map<String, Object> data = new LinkedHashMap<>();
+            data.put("color", color);
+            List<ProductOptionDtoDetails> size = new ArrayList<>();
+            productOption.stream()
+                    .filter(dto -> dto.getColor().equals(color))
+                    .forEach(dto -> size.add(dto.getProductOptionDtoDetailsList().get(0)));
+            data.put("size", size);
+            option.add(data);
+        });
+
+        //상품 정보 조회
+        Product product = productRepository.findProductById(productId).orElseThrow(
+                () -> new CustomException(HttpStatus.BAD_REQUEST, ErrorCode.NOT_EXISTED_DATA)
+        );
+
+        Map<String, Object> json = new HashMap<>();
+        json.put("products", product.toDTO());
+        json.put("options", option);
+
         return json;
     }
 
@@ -138,19 +171,15 @@ public class ProductServiceImpl implements ProductService{
     //장바구니 상품 수정
     @Transactional
     @Override
-    public void updateCart(Long cartId, Long productId, String size, String color, int count) {
+    public void updateCartOption(Long cartId, String size, String color) {
         Cart cart = cartRepository.findById(cartId).orElseThrow(
                 () -> new CustomException(HttpStatus.BAD_REQUEST, ErrorCode.NOT_EXISTED_DATA)
         );
 
-        Product product = productRepository.findById(productId).orElseThrow(
-                () -> new CustomException(HttpStatus.BAD_REQUEST, ErrorCode.NOT_EXISTED_DATA)
-
-        );
-        product.getProductOptions().stream()
+        cart.getProduct().getProductOptions().stream()
                 .filter(p -> p.getColor().equals(color) && p.getSize().equals(size))
                 .forEach(
-                        productOption -> cart.saveItem(cart, product, productOption, product.getPrice() * count, count)
+                        productOption -> cart.updateOption(cart, productOption)
                 );
 
     }

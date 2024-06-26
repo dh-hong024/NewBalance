@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import practice.newbalance.dto.item.ProductDto;
+import practice.newbalance.dto.item.ProductOptionDto;
 import practice.newbalance.service.item.ProductService;
 
 import java.util.ArrayList;
@@ -39,6 +40,20 @@ public class ProductController {
         productService.addProduct(productDto);
 
         return ResponseEntity.ok("sucess");
+    }
+
+    /*@GetMapping("/products/{productId}")
+    @ResponseBody
+    public List<ProductDto> detailProduct(@PathVariable("productId") Long productId){
+        List<ProductDto> productDtos = productService.detailProduct(productId);
+        System.out.println("productDtos = " + productDtos.toString());
+        return productDtos;
+    }*/
+
+    @GetMapping("/products/{productId}")
+    @ResponseBody
+    public Map<String, Object> getProductOption(@PathVariable("productId") Long productId){
+        return productService.getProductOption(productId);
     }
 
 
@@ -75,7 +90,7 @@ public class ProductController {
             @PathVariable("cartId") Long cartId,
             CartDto dto
     ){
-        productService.updateCart(cartId, dto.getProductId(), dto.getSize(), dto.getColor(), dto.getCount());
+        productService.updateCartOption(cartId, dto.getSize(), dto.getColor());
         return ResponseEntity.ok("success");
     }
 

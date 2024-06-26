@@ -47,4 +47,8 @@ public class Cart {
         cart.setCount(count);
         cart.setPrice(price);
     }
+
+    public void updateOption(Cart cart, ProductOption option){
+        cart.setProductOption(option);
+    }
 }

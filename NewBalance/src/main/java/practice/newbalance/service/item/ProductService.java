@@ -12,11 +12,15 @@ public interface ProductService {
 
     Map<String, Object>imgUpload(MultipartFile img);
 
+    //product
     Product addProduct(ProductDto productDto);
+    Map<String, Object> getProductOption(Long productId);
+
+    //cart
     void addCart(Long memberId, Long productId, String size, String color, int count);
     void delCart(Long cartId);
     void delAllCart(Long memberId);
     List<Cart> findCartAll(Long memberId);
-    void updateCart(Long cartId, Long productId, String size, String color, int count);
+    void updateCartOption(Long cartId, String size, String color);
     void updateCartCount(Long cartId, int count);
 }

@@ -10,8 +10,36 @@
     <title>Document</title>
     <link rel="stylesheet" href="/css/common/common.css">
     <link rel="stylesheet" href="/css/item/cart.css">
-    <script th:inline="javascript">
-        /*<![CDATA[*/
+    <link rel="stylesheet" href="/css/modal.css">
+
+    <script>
+        let object = {
+            cartId : null,
+            productId : null,
+            color : null,
+            size : null
+        }
+
+        function createOrder(){
+
+        }
+
+        function changeOption(){
+            $("#modalWrap").hide();
+            $.ajax({
+                method : "PUT",
+                url : "/my/cart/option/" + object.cartId,
+                data : {
+                    productId : object.productId,
+                    color : object.color,
+                    size : object.size
+                }, success : (data) => {
+                    location.href = "/my/cart";
+                    console.log(data);
+                }
+            })
+        }
+
         function updateCartCount(cartId){
             let data = {
                 "count" : $("#count").val()
@@ -26,9 +54,54 @@
             })
         }
 
-        function updateCartOption(cartId){
-            console.log("option" + cartId)
+        function updateCartOption(cartId, productId){
+            object.cartId = cartId;
+            object.productId = productId;
+            $.ajax({
+                url : "/products/" + productId,
+                method : "GET",
+                success : (data) => {
+                    //color radio 버튼 생성
+                    let ul = document.querySelector("#modalProdColor");
+                    ul.textContent = "";
+                    for(let i = 0; i < data.options.length; i++) {
+                        let li = document.createElement("li");
+                        let button = document.createElement("button");
+                        button.style.backgroundColor = data.options[i].color;
+                        button.style.height = "20px";
+                        button.style.width = "20px";
+                        li.appendChild(button);
+                        ul.appendChild(li);
+                        button.addEventListener("click", () => {
+                            object.color = data.options[i].color;
+                            showSizeBtn(data, i, object);
+                        })
+                    }
+
+                    //모달창 노출
+                    $("#modalWrap").show();
+                }
+            })
             return false;
+        }
+
+        function showSizeBtn(data, i, object){
+            let div = document.querySelector("#modalProdSize");
+            div.textContent = "";
+            for(let j = 0; j < data.options[i].size.length; j++){
+                let btn = document.createElement("button");
+                btn.style.height = "40px";
+                btn.style.width = "80px";
+                btn.style.margin = "10px";
+                if(data.options[i].size[j].quantity === 0){
+                    btn.disabled = true;
+                }
+                btn.innerText = data.options[i].size[j].sizeValue;
+                div.appendChild(btn);
+                btn.addEventListener("click", () => {
+                    object.size = data.options[i].size[j].sizeValue;
+                });
+            }
         }
 
         function delCartItem(cartId){
@@ -40,11 +113,35 @@
                 }
             });
         }
-        /*]]>*/
     </script>
 </head>
 <body>
 <div class="container" layout:fragment="content">
+    <div id="modalWrap"> <!-- 모달 창을 감싸는 div -->
+        <div id="modalBody">
+            <span id="closeBtn">&times;</span> <!-- 모달을 닫는 X 버튼 -->
+            <h2>옵션 변경하기</h2> <!-- 모달 창 내용 -->
+            <div id="modalCont">
+                <div class="modalCont"><img src="" alt="" id="productImg"></div>
+                <div class="modalCont">
+                    <p id="modal_style_code">스타일코드</p>
+                    <p>색상</p>
+                    <div>
+                        <ul id="modalProdColor">
+                        </ul>
+                    </div>
+                    <p>사이즈</p>
+                    <div id="modalProdSize">
+
+                    </div>
+                    <div>
+                        <button th:onclick="|changeOption()|">변경하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="tt_step">
         <p><span class="order_flow" id="cart">장바구니</span><span class="order_flow" id="order">주문/결제</span><span class="order_flow" id="complete">주문완료</span></p>
     </div>
@@ -75,7 +172,7 @@
                                 <a href="" th:text="${cart.getProduct().getTitle()}"></a>
                                 <p><span th:text="${cart.getProductOption().getSize()}"></span> , <span th:text="${cart.getProductOption().getColor()}"></span></p>
                                 <span th:text="${cart.getPrice()}"></span>
-                                <a href="#" th:onclick="|updateCartOption(${cart.getId()})|">변경</a>
+                                <a href="#" th:onclick="|updateCartOption(${cart.getId()}, ${cart.getProduct().getId()})|">변경</a>
                             </div>
 
                         </div>
@@ -92,7 +189,7 @@
                         <p th:text="${cart.getPrice()}"></p>
                     </td>
                     <td style="text-align: center">
-                        <p><a type="button" href="" id="cart_order_btn" class="cart_btn">주문하기</a></p><br>
+                        <p><a type="button" href="" id="cart_order_btn" class="cart_btn" th:onclick="|createOrder(${cart.getId()})|">주문하기</a></p><br>
                         <p><a href="#" id="cart_delete_btn" class="cart_btn" th:onclick="|delCartItem(${cart.getId()})|">삭제하기</a></p>
                     </td>
                 </tr>

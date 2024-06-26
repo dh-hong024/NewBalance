@@ -1,5 +1,6 @@
 package practice.newbalance.domain.item;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import practice.newbalance.domain.ModifierEntity;
@@ -31,6 +32,7 @@ public class Product extends ModifierEntity {
     @Column(name = "content")
     private String content;
 
+
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProductOption> productOptions = new ArrayList<>();
 
@@ -57,14 +59,13 @@ public class Product extends ModifierEntity {
                 .id(id)
                 .title(title)
                 .content(content)
-                .productOptions(productOptions)
                 .code(code)
-//                .contry(contry)
-//                .material(material)
-//                .features(features)
-//                .price(price)
-//                .manufactureDate(manufactureDate)
-//                .category(category)
+                .contry(contry)
+                .material(material)
+                .features(features)
+                .price(price)
+                .manufactureDate(manufactureDate)
+                .category(category)
                 .build();
     }
 

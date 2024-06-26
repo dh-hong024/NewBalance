@@ -75,6 +75,14 @@ tr > td{
     margin-right: 50px;
 }
 
+#modalProdColor > li {
+    list-style: none;
+}
+
+#optionColor{
+
+}
+
 .cart_content{
     display: inline-block;
     float: left;
