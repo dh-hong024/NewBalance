@@ -99,24 +99,25 @@ class ProductServiceTest {
     @Transactional
     void 장바구니_수정(){
         String size = "220";
-        String color = "RED";
+        String color = "#20dfa6";
         int count = 5;
         Long memberId = 1L;
-        Long optionId = 3L;
-        Long productId = 652L;
+        Long productId = 2L;
 
         Member member = memberRepository.findById(memberId).get();
-        Product product = productRepository.findById(productId).get();
-        ProductOption productOption = optionRepository.findById(3L).get();
+        Product product = productRepository.findProductById(productId).get();
 
-        Cart cart = Cart.createCart(member, product, productOption, 129000, 1);
+        Cart cart = Cart.createCart(member, product, product.getProductOptions().get(0), 129000, 1);
         cartRepository.save(cart);
 
-        productService.updateCart(cart.getId(), productId, size, color, count);
+        productService.updateCartOption(cart.getId(), size, color);
+        productService.updateCartCount(cart.getId(), count);
 
         Assertions.assertThat(cartRepository.findById(cart.getId()).get().getCount()).isEqualTo(5);
-        Assertions.assertThat(cartRepository.findById(cart.getId()).get().getProductOption().getId()).isEqualTo(1);
+        Assertions.assertThat(cartRepository.findById(cart.getId()).get().getProductOption().getColor()).isEqualTo("#20dfa6");
+        Assertions.assertThat(cartRepository.findById(cart.getId()).get().getProductOption().getSize()).isEqualTo("220");
         Assertions.assertThat(cartRepository.findById(cart.getId()).get().getPrice()).isEqualTo(645000);
+
 
     }
     @Test
