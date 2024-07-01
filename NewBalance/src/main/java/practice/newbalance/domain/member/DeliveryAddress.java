@@ -1,7 +1,9 @@
 package practice.newbalance.domain.member;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
+import practice.newbalance.domain.item.Order;
 import practice.newbalance.dto.member.DeliveryAddressDto;
 
 @Entity
@@ -32,6 +34,10 @@ public class DeliveryAddress {
     private String detailAddress;
 
     private Boolean defaultYN;
+
+    @JsonIgnore
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "deliveryAddress")
+    private Order order;
 
     public DeliveryAddressDto toDTO(){
         return DeliveryAddressDto.builder()

@@ -1,5 +1,6 @@
 package practice.newbalance.domain.item;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -33,6 +34,11 @@ public class Cart {
 
     @Column(name = "count")
     private int count;
+
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "order_id")
+    private Order order;
 
     public static Cart createCart(Member member, Product product, ProductOption option, int price, int count){
         Cart cart = new Cart();

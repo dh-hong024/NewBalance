@@ -1,15 +1,15 @@
 package practice.newbalance.domain.member;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import practice.newbalance.domain.board.Notice;
 import practice.newbalance.domain.item.Coupon;
+import practice.newbalance.domain.item.Order;
 import practice.newbalance.dto.member.MemberDto;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 @Entity
 @Table(name = "member")
@@ -50,7 +50,11 @@ public class Member {
     private Coupon coupon;
 
     @OneToMany(mappedBy = "memberId")
-    private List<DeliveryAddress> address;
+    private List<DeliveryAddress> address = new ArrayList<>();
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "member")
+    private List<Order> orders = new ArrayList<>();
 
     public MemberDto toDTO() {
         MemberDto memberDto = MemberDto.builder()
