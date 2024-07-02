@@ -12,6 +12,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @Setter @Getter
+@NoArgsConstructor
 public class ProductDto {
 
     private Long id;
