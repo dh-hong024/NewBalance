@@ -7,8 +7,13 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import practice.newbalance.config.handler.MemberAuthFailHandler;
 import practice.newbalance.config.handler.MemberAuthSuccessHandler;
+
+import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
@@ -20,7 +25,7 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests((auth) -> auth
                         .requestMatchers("/","/members/**", "/faqs/**","/notice/**","/notice"
-                                ,"/api/**", "/css/**", "common/config/**", "/products/**", "/test/**")
+                                ,"/api/**", "/css/**", "common/config/**", "/products/**", "/image/**", "/test/**")
                         .permitAll() //해당 경로는 인증 없이 접근 가능
                         .requestMatchers("/admin","/admin-page","/notice/notice-form","/notice/notice-detail",
                                 "/notice/edit-form","/admin/faqs", "/admin/coupon")
@@ -65,5 +70,4 @@ public class SecurityConfig {
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
 }

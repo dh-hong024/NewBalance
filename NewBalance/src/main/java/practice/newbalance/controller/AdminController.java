@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import practice.newbalance.domain.board.FaqTag;
 import practice.newbalance.domain.board.Notice;
 import practice.newbalance.dto.board.FaqDto;
@@ -20,6 +21,7 @@ import practice.newbalance.service.board.FaqServiceImpl;
 import practice.newbalance.service.board.NoticeService;
 import practice.newbalance.service.item.CategoryService;
 import practice.newbalance.service.item.CouponService;
+import practice.newbalance.service.item.ProductService;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -35,13 +37,15 @@ public class AdminController {
     private final CategoryService categoryService;
     private  final CouponService couponService;
 
+    private  final ProductService productService;
     @Autowired
-    public AdminController(NoticeService noticeService, MemberService memberService, FaqServiceImpl faqService, CategoryService categoryService, CouponService couponService) {
+    public AdminController(NoticeService noticeService, MemberService memberService, FaqServiceImpl faqService, CategoryService categoryService, CouponService couponService, ProductService productService) {
         this.noticeService = noticeService;
         this.memberService = memberService;
         this.faqService = faqService;
         this.categoryService = categoryService;
         this.couponService = couponService;
+        this.productService = productService;
     }
 
     @GetMapping("/admin-page")
@@ -340,4 +344,5 @@ public class AdminController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("fail");
         }
     }
+
 }

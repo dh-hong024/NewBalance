@@ -8,4 +8,6 @@ import java.util.List;
 public interface CustomCategoryRepository {
 
     List<CategoryDto> findByCategory(String title);
+
+    List<CategoryDto> findDetailedCategories(String parentTitle, Integer subCategoryRef);
 }

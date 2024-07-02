@@ -15,6 +15,7 @@ public class ProductOptionDto {
 
     private String color;
     private List<ProductOptionDtoDetails> productOptionDtoDetailsList;
+
 //    private String size;
 //    private int quantity;
 

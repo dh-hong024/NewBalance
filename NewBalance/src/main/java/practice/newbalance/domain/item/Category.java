@@ -1,5 +1,6 @@
 package practice.newbalance.domain.item;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 import practice.newbalance.dto.item.CategoryDto;
@@ -32,6 +33,7 @@ public class Category {
     @Column(name = "step")
     private int step;
 
+    @JsonBackReference
     @OneToMany(mappedBy = "category")
     private List<Product> products = new ArrayList<>();
 
@@ -44,6 +46,9 @@ public class Category {
                 .step(step)
                 .build();
         return categoryDto;
+    }
+    public Category(String id) {
+        this.id = Long.parseLong(id);
     }
 
 }

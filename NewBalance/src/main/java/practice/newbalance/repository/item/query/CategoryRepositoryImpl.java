@@ -2,6 +2,7 @@ package practice.newbalance.repository.item.query;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.stereotype.Repository;
 import practice.newbalance.domain.item.CategoryEnum;
@@ -37,6 +38,23 @@ public class CategoryRepositoryImpl implements CustomCategoryRepository {
                         category.step))
                 .from(category)
                 .where(titleChecked(title))
+                .orderBy(category.id.asc())
+                .fetch();
+    }
+
+    public List<CategoryDto> findDetailedCategories(String parentTitle, Integer subCategoryRef) {
+        QCategory category = QCategory.category;
+
+        return queryFactory.select(Projections.constructor(
+                        CategoryDto.class,
+                        category.id,
+                        category.name,
+                        category.title,
+                        category.ref,
+                        category.step))
+                .from(category)
+                .where(category.title.eq(CategoryEnum.valueOf(parentTitle))
+                        .and(category.ref.eq(subCategoryRef)))
                 .orderBy(category.id.asc())
                 .fetch();
     }

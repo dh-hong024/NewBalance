@@ -1,11 +1,12 @@
 package practice.newbalance.dto.item;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 import practice.newbalance.domain.item.Category;
 import practice.newbalance.domain.item.Product;
 import practice.newbalance.domain.item.ProductOption;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 @Builder
@@ -32,11 +33,13 @@ public class ProductDto {
 
     private int price;
 
-    private LocalDateTime manufactureDate;
+    private LocalDate manufactureDate;
 
     private Category category;
 
     private String option;
+
+    private List<String> imageUrls;
 
     public Product toEntity(){
         return Product.builder()
@@ -45,12 +48,13 @@ public class ProductDto {
                 .content(content)
                 .productOptions(productOptions)
                 .code(code)
-//                .contry(contry)
-//                .material(material)
-//                .features(features)
-//                .price(price)
-//                .manufactureDate(manufactureDate)
-//                .category(category)
+                .contry(contry)
+                .material(material)
+                .features(features)
+                .price(price)
+                .manufactureDate(manufactureDate)
+                .category(category)
+                .imageUrls(imageUrls)
                 .build();
     }
 }

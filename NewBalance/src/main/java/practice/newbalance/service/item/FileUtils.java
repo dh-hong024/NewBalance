@@ -16,9 +16,10 @@ public class FileUtils {
     @Autowired
     private ServletContext ctx; // 내장 tomcat이기 때문에
 
+    private static final String BASE_PATH = "c:/upload";
+
     public void makeFolders(String path) {
         File folder = new File(path);
-        System.out.println("path = " + path);
 
         if(!folder.exists()) {
             folder.mkdirs();
@@ -30,8 +31,8 @@ public class FileUtils {
         for(String s : moreFolder) {
             temp += s;
         }
-//        String basePath = ctx.getRealPath(temp);
-        return ctx.getRealPath(temp); // tomcat이 내장되어있기 때문에 tomcat이 인식하는 경로를 설정해야한다.
+//        return ctx.getRealPath(temp); // tomcat이 내장되어있기 때문에 tomcat이 인식하는 경로를 설정해야한다.
+        return BASE_PATH + String.join("/", temp); // 로컬환경에 저장하기위해 ContextServlet 경로 사용안함
     }
 
     // 확장자 얻어오기
@@ -44,9 +45,11 @@ public class FileUtils {
         return UUID.randomUUID().toString() + "." + getExt(fileNm);
     }
 
-    public String transferTo(MultipartFile mf, boolean createThumb, String... target) throws Exception {
+//    public String transferTo(MultipartFile mf, boolean createThumb, String... target) throws Exception {
+    public String transferTo(MultipartFile mf, String... target) throws Exception {
         String fileNm = null;
         String basePath = getBasePath(target);
+//        String basePath = BASE_PATH + String.join("/", target);
         makeFolders(basePath);
         File file;
 
@@ -62,5 +65,4 @@ public class FileUtils {
 //        }
         return fileNm;
     }
-
 }

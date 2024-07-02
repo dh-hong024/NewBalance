@@ -15,4 +15,7 @@ public interface CategoryService {
 
     void deleteItem(Long categoryId);
 
+    List<CategoryDto> findDetailedCategories(String parentTitle, Integer subCategoryRef);
+
+    List<CategoryDto> getAllCategories();
 }

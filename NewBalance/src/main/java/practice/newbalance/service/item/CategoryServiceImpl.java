@@ -10,6 +10,7 @@ import practice.newbalance.repository.item.query.CustomCategoryRepository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class CategoryServiceImpl implements CategoryService{
@@ -62,5 +63,18 @@ public class CategoryServiceImpl implements CategoryService{
     @Override
     public void deleteItem(Long categoryId) {
         categoryRepository.deleteById(categoryId);
+    }
+
+    @Override
+    public List<CategoryDto> findDetailedCategories(String parentTitle, Integer subCategoryRef) {
+        return customCategoryRepository.findDetailedCategories(parentTitle, subCategoryRef);
+    }
+
+    @Override
+    public List<CategoryDto> getAllCategories() {
+        List<Category> categories = categoryRepository.findAll();
+        return categories.stream()
+                .map(Category::toDto)
+                .collect(Collectors.toList());
     }
 }

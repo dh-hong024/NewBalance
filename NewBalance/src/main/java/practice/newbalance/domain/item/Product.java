@@ -1,11 +1,13 @@
 package practice.newbalance.domain.item;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import practice.newbalance.domain.ModifierEntity;
 import practice.newbalance.dto.item.ProductDto;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,7 +52,16 @@ public class Product extends ModifierEntity {
     private int price;
 
     @Column(name = "manufacture_date")
-    private LocalDateTime manufactureDate;
+    private LocalDate manufactureDate;
+
+    @ElementCollection
+    @CollectionTable(name = "product_images", joinColumns = @JoinColumn(name = "product_id"))
+    @Column(name = "img_url")
+    private List<String> imageUrls;
+
+    @ElementCollection
+    @Column(name = "thumnail")
+    private List<String> thumnail;
 
     public ProductDto toDTO(){
         return ProductDto.builder()
@@ -59,12 +70,13 @@ public class Product extends ModifierEntity {
                 .content(content)
                 .productOptions(productOptions)
                 .code(code)
-//                .contry(contry)
-//                .material(material)
-//                .features(features)
-//                .price(price)
-//                .manufactureDate(manufactureDate)
-//                .category(category)
+                .contry(contry)
+                .material(material)
+                .features(features)
+                .price(price)
+                .manufactureDate(manufactureDate)
+                .category(category)
+                .imageUrls(imageUrls)
                 .build();
     }
 
