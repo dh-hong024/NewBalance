@@ -1,9 +1,10 @@
 package practice.newbalance.dto.item;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
 
-@Getter @Setter
+@Getter
+@AllArgsConstructor
 public class ProductOptionDtoDetails {
     private String sizeValue;
     private int quantity;

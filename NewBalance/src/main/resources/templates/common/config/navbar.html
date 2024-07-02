@@ -22,7 +22,7 @@
                 </div>
                 <div class="gnb">
                     <ul>
-                        <li><a href="/members/inquiry">장바구니</a></li>
+                        <li><a href="/my/cart">장바구니</a></li>
                         <li sec:authorize="hasRole('ROLE_ADMIN')"><a href="/admin-page">관리자페이지</a></li>
                         <li sec:authorize="hasRole('ROLE_ADMIN')"><a href="/members/logout" sec:authorize="isAuthenticated()">로그아웃</a></li>
                         <li sec:authorize="hasRole('ROLE_USER')"><a href="/my">마이페이지</a></li>

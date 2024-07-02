@@ -1,7 +1,5 @@
 package practice.newbalance.domain.item;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import practice.newbalance.domain.ModifierEntity;
@@ -59,16 +57,12 @@ public class Product extends ModifierEntity {
     @Column(name = "img_url")
     private List<String> imageUrls;
 
-    @ElementCollection
-    @Column(name = "thumnail")
-    private List<String> thumnail;
 
     public ProductDto toDTO(){
         return ProductDto.builder()
                 .id(id)
                 .title(title)
                 .content(content)
-                .productOptions(productOptions)
                 .code(code)
                 .contry(contry)
                 .material(material)
